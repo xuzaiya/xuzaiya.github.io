@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA['hexo博客配置背景音乐和绑定域名']]></title>
+    <url>%2F2019%2F09%2F20%2Fhexo%E5%8D%9A%E5%AE%A2%E9%85%8D%E7%BD%AE%E8%83%8C%E6%99%AF%E9%9F%B3%E4%B9%90%E5%92%8C%E7%BB%91%E5%AE%9A%E5%9F%9F%E5%90%8D%2F</url>
+    <content type="text"><![CDATA[给hexo博客next主题添加背景音乐1.生成外链播放器html代码 2.将赋值的代码拷贝到themes/next/layout/_macro/sidebar.swig 文件下 123456&lt;!--音乐播放器--&gt; &lt;div id="music163player"&gt; &#123;%if theme.background_music %&#125; &lt;iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&amp;id=483937795&amp;auto=1&amp;height=66"&gt;&lt;/iframe&gt; &#123;% endif %&#125; &lt;/div&gt; 3.在主题的配置文件的末尾添加以下代码： 123//后面拷贝的路径为第2步拷贝的src后面的代码background_music://music.163.com/outchain/playertype=0&amp;id=2992021935&amp;auto=1&amp;height=90 4.最终效果 绑定域名1.购买域名。 2.进入域名解析列表并对购买的域名进行解析 其中，着两条记录要自己添加 win+R快捷键打开“运行”窗口，输入cmd运行命令行控制台输入命令：ping yourusername.github.io 拿到你的github的ip地址 添加详细细节： 3.在你的博客的主目录下的public文件夹下建一个名称为CNAME的文件，记住，不要后缀名，在文件里面填写你的博客的地址， yourusername.github.io]]></content>
+      <tags>
+        <tag>hexo博客</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA['初学者：博客入门']]></title>
     <url>%2F2019%2F09%2F17%2F%E5%88%9D%E5%AD%A6%E8%80%85%EF%BC%9A%E5%8D%9A%E5%AE%A2%E5%85%A5%E9%97%A8%2F</url>
     <content type="text"><![CDATA[前言听B站大神推荐，作为程序员，必须拥有属于自己的博客，我也觉得很有必要，所以在网上学查了一些资料，自己搭了一个自己的博客，感觉博客还挺有趣的，不断能够锻炼自己的写作能力，而且也能分享自己踩过的一些坑，记录自己的生活，记录自己对某些技术的一些理解，希望自己能够一直坚持下来，加油！ 技术点介绍Hexo框架+Markdown标记语言。Hexo是一个快速，简洁并且高效的博客框架，Hexo使用Markdown（或者其他渲染引擎）解析文章，在几秒内，即可利用靓丽的主题生成静态的网页。 安装安装Hexo框架之前，我们需要安装Node.js(版本不低于8.6)和Git，我们可以在Node.js的官网下载安装Node.js，在Git的官网下载安装git ，安装好git和Node.js 后，我们可以检查是否安装好了git和Node.js 12345//Windows+R 输入cmd 打开命令行//查看node 的版本输入： node -v//查看 git 的本版输入： git --version 效果如下： 12345678910//安装hexo框架 很简单 一步搞定npm install -g hexo-cli //安装hexo博客框架， -g表示全局安装mkdir myblog // 新建一个myblog文件夹 名字随便取cd myblog // 进入到myblog文件夹hexo init //初始化一篇博客hexo new '新建的博客名' // 新建一个博客hexo s // 启动博客hexo d // 部署博客hexo clean // 清除缓存hexo g //重新生成静态文件 这里只是介绍简单的hexo命令，更详细的的教程我们可以查看hexo的官网文档,安装好后我们可以新建一篇博客，然后用 heox s 命令启动博客， 后期我们想要给自己的博客换主题的话，我们可以参这篇博客，hexo+NexT主题，如何搭建一个炫酷的博客. 踩过的坑站点的配置文件 _config.yml ,这是我遇到了一个坑。 心得体会第一次写博客，写的很垃圾，写的东西很浅显，希望日后不断的学习，不断的努力，争取写出很好的博客，更有水平的博客，加油。]]></content>
