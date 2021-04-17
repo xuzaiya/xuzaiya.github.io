@@ -1,6 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Hexo常用命令详解</title>
+    <url>/2021/04/11/Hexo%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E8%AF%A6%E8%A7%A3/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="Hexo常用命令详解"><a href="#Hexo常用命令详解" class="headerlink" title="Hexo常用命令详解"></a>Hexo常用命令详解</h2><h3 id="1、hexo-init"><a href="#1、hexo-init" class="headerlink" title="1、hexo init"></a>1、hexo init</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo init 命令用于初始化一个本地文件夹为网站的根目录</span><br></pre></td></tr></table></figure>
+
+<h3 id="2、hexo-new"><a href="#2、hexo-new" class="headerlink" title="2、hexo new"></a>2、hexo new</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo new title 新建一篇文章</span><br></pre></td></tr></table></figure>
+
+<h3 id="3、hexo-generate"><a href="#3、hexo-generate" class="headerlink" title="3、hexo generate"></a>3、hexo generate</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo generate 可以简写成 hexo g</span><br><span class="line">该命令用于生成静态文件</span><br></pre></td></tr></table></figure>
+
+<h3 id="4、hexo-server"><a href="#4、hexo-server" class="headerlink" title="4、hexo server"></a>4、hexo server</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo server 命令用于启动本地服务器，一般可以简写成 hexo s</span><br><span class="line">可以加一些参数</span><br><span class="line">-p    选项，指定服务器端口，默认为 4000</span><br><span class="line">-i    选项，指定服务器 IP 地址，默认为 0.0.0.0</span><br><span class="line">-s    选项，静态模式 ，仅提供 public 文件夹中的文件并禁用文件监视</span><br></pre></td></tr></table></figure>
+
+<h3 id="5、hexo-deploy"><a href="#5、hexo-deploy" class="headerlink" title="5、hexo deploy"></a>5、hexo deploy</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo deploy 命令用于部署网站，一般可以简写成 hexo d</span><br></pre></td></tr></table></figure>
+
+<h3 id="6、hexo-clean"><a href="#6、hexo-clean" class="headerlink" title="6、hexo clean"></a>6、hexo clean</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo clean 命令用于清理缓存文件，是一个比较常用的命令</span><br></pre></td></tr></table></figure>
+
+<h3 id="7、hexo-–safe"><a href="#7、hexo-–safe" class="headerlink" title="7、hexo  –safe"></a>7、hexo  –safe</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo --safe 表示安全模式，用于禁用加载插件和脚本</span><br></pre></td></tr></table></figure>
+
+<h3 id="8、hexo-–debug"><a href="#8、hexo-–debug" class="headerlink" title="8、hexo –debug"></a>8、hexo –debug</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo --debug 表示调试模式，用于将消息详细记录到终端和 debug.log 文件</span><br></pre></td></tr></table></figure>
+
+<h3 id="9、hexo-–silent"><a href="#9、hexo-–silent" class="headerlink" title="9、hexo –silent"></a>9、hexo –silent</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo --silent  表示静默模式，用于静默输出到终端</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>hexo</category>
+        <category>hexo常用命令</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Jenkins实战一</title>
     <url>/2021/04/16/Jenkins%E5%AE%9E%E6%88%98%E4%B8%80/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="Jenkins实战-—–入门介绍"><a href="#Jenkins实战-—–入门介绍" class="headerlink" title="Jenkins实战 —–入门介绍"></a>Jenkins实战 —–入门介绍</h1><h2 id="什么是Jenkins？"><a href="#什么是Jenkins？" class="headerlink" title="什么是Jenkins？"></a>什么是Jenkins？</h2><p>  Jenkins是一个开源的、提供友好操作界面的持续集成(CI)工具，起源于Hudson（Hudson是商用的），主要用于持续、自动的构建/测试软件项目、监控外部任务的运行（这个比较抽象，暂且写上，不做解释）。Jenkins用<strong>Java</strong>语言编写，可在Tomcat等流行的servlet容器中运行，也可独立运行。通常与版本管理工具(SCM)、构建工具结合使用。常用的版本控制工具有SVN、GIT，构建工具有Maven、Ant、Gradle。</p>
@@ -27,6 +57,27 @@
         <category>Jenkins</category>
         <category>Jenkins实战</category>
       </categories>
+  </entry>
+  <entry>
+    <title>SQL格式应该这样写</title>
+    <url>/2020/08/13/SQL%E6%97%A5%E8%AE%B0SQL%E6%A0%BC%E5%BC%8F%E5%BA%94%E8%AF%A5%E8%BF%99%E6%A0%B7%E5%86%99/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="开头"><a href="#开头" class="headerlink" title="开头"></a>开头</h2><p>原来从未注重过SQL的书写格式，写出来最长的有30行左右，当时居然还那么骄傲。😹 现在想想，30行一时爽，需求火葬场。看到自己超长的SQL，还有项目里其他的SQL，心中唏嘘不已。SQL也是代码，自己最近快要变成“SQL小王子”，作为王子，一定要优雅，那么在这里就把以后写SQL的格式规范一下，以便于后人一眼便可看出王子的背影。 🌟</p>
+<h2 id="格式"><a href="#格式" class="headerlink" title="格式"></a>格式</h2><p>格式参考，来源于<a href="https://javarevisited.blogspot.com/2017/01/a-better-way-to-write-sql-queries.html#ixzz66I8M2Yj5" target="_blank" rel="noopener">A Better way to write Complex SQL queries for Programmers</a>,感谢大佬让我成为王子，哈哈。</p>
+<p>示例SQL</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> c.student_id, s.student_name, c.course_name</span><br><span class="line"><span class="keyword">FROM</span> (<span class="keyword">SELECT</span> student_id, course_name</span><br><span class="line">      <span class="keyword">FROM</span> table_course</span><br><span class="line">      <span class="keyword">WHERE</span> grade &gt; <span class="number">60</span>) c</span><br><span class="line"><span class="keyword">INNER</span> <span class="keyword">JOIN</span> table_student s <span class="keyword">on</span> c.student_id = s.student_id</span><br><span class="line"><span class="keyword">WHERE</span> c.student_id &gt; <span class="number">1</span></span><br><span class="line">  <span class="comment">-- 如果你想知道这句SQL在干什么</span></span><br><span class="line">  <span class="comment">-- 那你就输了</span></span><br><span class="line">  <span class="keyword">AND</span> c.student_id &lt; <span class="number">100</span></span><br></pre></td></tr></table></figure>
+
+<p>Tips:<br>1.为了可读性，可以将SQL拆分为多行，如上示例所示，如果存在嵌套查询仍然遵循此规范；</p>
+<p>2.WHERE条件判断时，加入缩进同样会提升可读性；</p>
+<p>3.拆分判断条件的好处是：能够在行与行之间进行注释；</p>
+<h2 id="结尾"><a href="#结尾" class="headerlink" title="结尾"></a>结尾</h2><p>超短的博客，最近与SQL为伍，让写的SQL也能够优雅起来，才够得上“王子”。</p>
+]]></content>
+      <categories>
+        <category>SQL</category>
+        <category>SQL基础知识</category>
+      </categories>
+      <tags>
+        <tag>SQL</tag>
+      </tags>
   </entry>
   <entry>
     <title>Jenkins实战二</title>
@@ -59,57 +110,6 @@
         <category>Jenkins</category>
         <category>Jenkins实战</category>
       </categories>
-  </entry>
-  <entry>
-    <title>Hexo常用命令详解</title>
-    <url>/2021/04/11/Hexo%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E8%AF%A6%E8%A7%A3/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="Hexo常用命令详解"><a href="#Hexo常用命令详解" class="headerlink" title="Hexo常用命令详解"></a>Hexo常用命令详解</h2><h3 id="1、hexo-init"><a href="#1、hexo-init" class="headerlink" title="1、hexo init"></a>1、hexo init</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo init 命令用于初始化一个本地文件夹为网站的根目录</span><br></pre></td></tr></table></figure>
-
-<h3 id="2、hexo-new"><a href="#2、hexo-new" class="headerlink" title="2、hexo new"></a>2、hexo new</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo new title 新建一篇文章</span><br></pre></td></tr></table></figure>
-
-<h3 id="3、hexo-generate"><a href="#3、hexo-generate" class="headerlink" title="3、hexo generate"></a>3、hexo generate</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo generate 可以简写成 hexo g</span><br><span class="line">该命令用于生成静态文件</span><br></pre></td></tr></table></figure>
-
-<h3 id="4、hexo-server"><a href="#4、hexo-server" class="headerlink" title="4、hexo server"></a>4、hexo server</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo server 命令用于启动本地服务器，一般可以简写成 hexo s</span><br><span class="line">可以加一些参数</span><br><span class="line">-p    选项，指定服务器端口，默认为 4000</span><br><span class="line">-i    选项，指定服务器 IP 地址，默认为 0.0.0.0</span><br><span class="line">-s    选项，静态模式 ，仅提供 public 文件夹中的文件并禁用文件监视</span><br></pre></td></tr></table></figure>
-
-<h3 id="5、hexo-deploy"><a href="#5、hexo-deploy" class="headerlink" title="5、hexo deploy"></a>5、hexo deploy</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo deploy 命令用于部署网站，一般可以简写成 hexo d</span><br></pre></td></tr></table></figure>
-
-<h3 id="6、hexo-clean"><a href="#6、hexo-clean" class="headerlink" title="6、hexo clean"></a>6、hexo clean</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo clean 命令用于清理缓存文件，是一个比较常用的命令</span><br></pre></td></tr></table></figure>
-
-<h3 id="7、hexo-–safe"><a href="#7、hexo-–safe" class="headerlink" title="7、hexo  –safe"></a>7、hexo  –safe</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo --safe 表示安全模式，用于禁用加载插件和脚本</span><br></pre></td></tr></table></figure>
-
-<h3 id="8、hexo-–debug"><a href="#8、hexo-–debug" class="headerlink" title="8、hexo –debug"></a>8、hexo –debug</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo --debug 表示调试模式，用于将消息详细记录到终端和 debug.log 文件</span><br></pre></td></tr></table></figure>
-
-<h3 id="9、hexo-–silent"><a href="#9、hexo-–silent" class="headerlink" title="9、hexo –silent"></a>9、hexo –silent</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo --silent  表示静默模式，用于静默输出到终端</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>hexo</category>
-        <category>hexo常用命令</category>
-      </categories>
-      <tags>
-        <tag>hexo</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>SQL格式应该这样写</title>
-    <url>/2020/08/13/SQL%E6%97%A5%E8%AE%B0SQL%E6%A0%BC%E5%BC%8F%E5%BA%94%E8%AF%A5%E8%BF%99%E6%A0%B7%E5%86%99/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="开头"><a href="#开头" class="headerlink" title="开头"></a>开头</h2><p>原来从未注重过SQL的书写格式，写出来最长的有30行左右，当时居然还那么骄傲。😹 现在想想，30行一时爽，需求火葬场。看到自己超长的SQL，还有项目里其他的SQL，心中唏嘘不已。SQL也是代码，自己最近快要变成“SQL小王子”，作为王子，一定要优雅，那么在这里就把以后写SQL的格式规范一下，以便于后人一眼便可看出王子的背影。 🌟</p>
-<h2 id="格式"><a href="#格式" class="headerlink" title="格式"></a>格式</h2><p>格式参考，来源于<a href="https://javarevisited.blogspot.com/2017/01/a-better-way-to-write-sql-queries.html#ixzz66I8M2Yj5" target="_blank" rel="noopener">A Better way to write Complex SQL queries for Programmers</a>,感谢大佬让我成为王子，哈哈。</p>
-<p>示例SQL</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> c.student_id, s.student_name, c.course_name</span><br><span class="line"><span class="keyword">FROM</span> (<span class="keyword">SELECT</span> student_id, course_name</span><br><span class="line">      <span class="keyword">FROM</span> table_course</span><br><span class="line">      <span class="keyword">WHERE</span> grade &gt; <span class="number">60</span>) c</span><br><span class="line"><span class="keyword">INNER</span> <span class="keyword">JOIN</span> table_student s <span class="keyword">on</span> c.student_id = s.student_id</span><br><span class="line"><span class="keyword">WHERE</span> c.student_id &gt; <span class="number">1</span></span><br><span class="line">  <span class="comment">-- 如果你想知道这句SQL在干什么</span></span><br><span class="line">  <span class="comment">-- 那你就输了</span></span><br><span class="line">  <span class="keyword">AND</span> c.student_id &lt; <span class="number">100</span></span><br></pre></td></tr></table></figure>
-
-<p>Tips:<br>1.为了可读性，可以将SQL拆分为多行，如上示例所示，如果存在嵌套查询仍然遵循此规范；</p>
-<p>2.WHERE条件判断时，加入缩进同样会提升可读性；</p>
-<p>3.拆分判断条件的好处是：能够在行与行之间进行注释；</p>
-<h2 id="结尾"><a href="#结尾" class="headerlink" title="结尾"></a>结尾</h2><p>超短的博客，最近与SQL为伍，让写的SQL也能够优雅起来，才够得上“王子”。</p>
-]]></content>
-      <categories>
-        <category>SQL</category>
-        <category>SQL基础知识</category>
-      </categories>
-      <tags>
-        <tag>SQL</tag>
-      </tags>
   </entry>
   <entry>
     <title>SQL必会知识点</title>
@@ -1682,23 +1682,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Nginx部署Hexo博客</title>
-    <url>/2020/08/13/nginx%E9%83%A8%E7%BD%B2hexo%E5%8D%9A%E5%AE%A2/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="使用centos-7系统-用Nginx代理hexo博客的静态文件"><a href="#使用centos-7系统-用Nginx代理hexo博客的静态文件" class="headerlink" title="使用centos 7系统 用Nginx代理hexo博客的静态文件"></a>使用centos 7系统 用Nginx代理hexo博客的静态文件</h2><p>在本地使用hexo g 命令生成的public 文件，我们将public目录拷贝的Nginx的html目录中然后做一下配置即可：</p>
-<p><img src="https://s1.ax1x.com/2020/08/14/dCQb6g.png" alt></p>
-<p>然后我们就可以在浏览器上访问我们的博客了</p>
-<p><img src="https://s1.ax1x.com/2020/08/14/dClknJ.png" alt></p>
-<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><p>我在linux系统也安装的node.js和 hexo，但是在linux 系统上面打包的public文件代理出来，没有页面显示，调试了很久也不行，因此在windows系统将打包好的public 目录文件，拷贝到linux系统放在nginx里面才行。巨坑，花了我很长的时间才解决，配置文件什么都没有问题，哎，服 了。</p>
-]]></content>
-      <categories>
-        <category>nginx</category>
-        <category>nginx部署</category>
-      </categories>
-      <tags>
-        <tag>linux</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>&#39;mybatis框架一&#39;</title>
     <url>/2019/09/24/mybatis%E6%A1%86%E6%9E%B6%E4%B8%80/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>现在是2019年9月23号，晚上23:40，我目前是研二上学期，秋季上学期刚开学，我对自己职业规划是毕业后从事java后端开发，对于很多企业都要求后端开发者具备mybatis框架知识体系，为了毕业后能够找到一份令自己满意的工作，我开始学习了mybatis框架，以下是我学习mybatis框架的一些浅薄的认知，<strong>适合初学者阅读</strong></p>
@@ -1740,6 +1723,23 @@
       </categories>
       <tags>
         <tag>mybatis</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Nginx部署Hexo博客</title>
+    <url>/2020/08/13/nginx%E9%83%A8%E7%BD%B2hexo%E5%8D%9A%E5%AE%A2/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="使用centos-7系统-用Nginx代理hexo博客的静态文件"><a href="#使用centos-7系统-用Nginx代理hexo博客的静态文件" class="headerlink" title="使用centos 7系统 用Nginx代理hexo博客的静态文件"></a>使用centos 7系统 用Nginx代理hexo博客的静态文件</h2><p>在本地使用hexo g 命令生成的public 文件，我们将public目录拷贝的Nginx的html目录中然后做一下配置即可：</p>
+<p><img src="https://s1.ax1x.com/2020/08/14/dCQb6g.png" alt></p>
+<p>然后我们就可以在浏览器上访问我们的博客了</p>
+<p><img src="https://s1.ax1x.com/2020/08/14/dClknJ.png" alt></p>
+<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><p>我在linux系统也安装的node.js和 hexo，但是在linux 系统上面打包的public文件代理出来，没有页面显示，调试了很久也不行，因此在windows系统将打包好的public 目录文件，拷贝到linux系统放在nginx里面才行。巨坑，花了我很长的时间才解决，配置文件什么都没有问题，哎，服 了。</p>
+]]></content>
+      <categories>
+        <category>nginx</category>
+        <category>nginx部署</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
