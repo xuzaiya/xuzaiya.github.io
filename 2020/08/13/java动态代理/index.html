@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="卷首语 最遥不可及的不是十年后，而是今天之前。">
+<meta name="keywords" content="java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java动态代理">
+<meta property="og:url" content="http://yoursite.com/2020/08/13/java动态代理/index.html">
+<meta property="og:site_name" content="xuzai&#39;s Blog">
+<meta property="og:description" content="卷首语 最遥不可及的不是十年后，而是今天之前。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2021-04-12T05:03:53.626Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="java动态代理">
+<meta name="twitter:description" content="卷首语 最遥不可及的不是十年后，而是今天之前。">
+
+<link rel="canonical" href="http://yoursite.com/2020/08/13/java动态代理/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>java动态代理 | xuzai's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+
+	<link rel="stylesheet" href="/dist/APlayer.min.css">
+	<div id="aplayer"></div>
+	<script type="text/javascript" src="/dist/APlayer.min.js"></script>
+	<script type="text/javascript" src="/dist/music.js"></script>
+
+	
+
+
+
+  <div class="container use-motion">
+    
+	
+	
+	<a href="https://github.com/xuzaiya?tab=repositories" class="github-corner" aria-label="View source on GitHub">
+	<svg width="80" height="80" viewBox="0 0 250 250" style="fill:#64CEAA; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true">
+	<path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z">
+	</path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+	<style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+	
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">xuzai's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">学海无涯，回头是岸！</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-作者">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>作者</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">11</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">22</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">23</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/13/java动态代理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/yangxu.jpg">
+      <meta itemprop="name" content="旭仔">
+      <meta itemprop="description" content="不辜负每一份热情<br/>也不讨好每一份冷漠">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xuzai's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          java动态代理
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-08-13 09:02:42" itemprop="dateCreated datePublished" datetime="2020-08-13T09:02:42Z">2020-08-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-12 05:03:53" itemprop="dateModified" datetime="2021-04-12T05:03:53Z">2021-04-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/java基础知识/" itemprop="url" rel="index"><span itemprop="name">java基础知识</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/08/13/java动态代理/" class="post-meta-item leancloud_visitors" data-flag-title="java动态代理" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/08/13/java动态代理/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/08/13/java动态代理/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="卷首语"><a href="#卷首语" class="headerlink" title="卷首语"></a>卷首语</h2><blockquote>
+<p>最遥不可及的不是十年后，而是今天之前。</p>
+</blockquote>
+<p>今天要说的内容从前本人便已经坐过文章，而且，那时候动态代理还是本人第一次在网上发的博客。时隔三年，又来炒冷饭。成长了也没有成长。长大的过程就是这样曲折蜿蜒，总让人有种不真实的感觉，坐在同一个房间，写着同样的内容，浮现的回忆却不一样。时间真是不可思议的东西。</p>
+<p>那么，今天就想从前那样，从头认识一下这个熟悉的陌生人——动态代理。不过要了解动态代理，最好还是把代理模式给弄清楚。</p>
+<h2 id="静态代理模式"><a href="#静态代理模式" class="headerlink" title="静态代理模式"></a>静态代理模式</h2><p>一来就开始怼概念，那和别人的文章又有何别？我喜欢讲故事，所以今天先讲个故事。话说王二是个王老五，至于是不是钻石级别的，那咱就不得而知了。不过，他这人生来就有个毛病，总觉得这世上每个女人都喜欢他，也许就是因为这个毛病，没几个女人想和他说话。就好像走路上时遇到的飞虫，叨扰你却总觉得是因为你闯进了它的领地造成的。过了而立之年，王二终于发现没人陪是那么一点寂寞。但自己的名声在这个镇子上早臭了。可好巧不巧，他就在镇上遇到了心动的女子。碍于自己的臭名声，他不敢接近她。没法，他向了无大仙求助。大仙看在他平日里还是会偷偷给自己送几只烧鸡的份上，也就答应帮他一把，他让王二留下了一缕头发，叫王二三天后来取宝物。</p>
+<p>三日过后，王二屁颠屁颠跑到大师那里，顺带又带了两只烧鸡。等大师风卷残云之后，心满意足的从口袋里拿出一个头套。说着，“拿去吧，在上街之前，对着头套把你想要他帮你改掉的毛病对他说了，再把它带到头上就可以了”。王二谢过大师之后，就戴着头套跑回了家。到家后，他感到装着的头套和自己的心跳保持着同样的频率。他小心翼翼取出头套。在心里默念：“帮我在那个女人面前表现得诚恳一些，不要说一些自恋的话。”之间头套轻轻动了下，就慢慢飘到他头上去了，就好像答应他似的。每次遇到那些女人，王二都会通过头套组织好语言，和她们寒暄几句。镇上的人也发现了王二的转变，王二心仪的女子也慢慢王二热络起来。一切都朝着美好的方向发展着。</p>
+<p>故事说了一半，但这一部分已经足够去重新阐述和了解代理模式是什么？在理解代理模式之前，我们先确定几件事，委托者，代理者，需求接口。那么，故事里的这些意象又是指的什么呢？首先，是我们的主角王二，他充当的角色是委托者，他想要让头套帮助自己润色语言。其次，便是头套，这个意象其实就是所说的代理者，由它去代替王二润色语言，把润色后的语言告诉王二，让王二把话说出来就好了。最后，便是王二向头套说自己需求的过程，这个过程抽象后，其实就是需求接口。王二和头套的关联在于王二把需求告知了头套，而<strong>代理模式则是让委托者和代理者都实现了需求接口</strong>，从而达到了代理者能够在委托者执行响应操作前进行一些特定的业务逻辑，同时，这样的操作又不会对原有的委托者对象代码有任何的影响。</p>
+<p>那么把这一段故事用代码表示就可以是这样的：</p>
+<p>王二告知头套想要他帮忙做的事：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">IWhatWangWannaDo</span> </span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 说话</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> word 说的内容</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">sayWord</span><span class="params">(String word)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>王二这个人：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Wang</span> <span class="keyword">implements</span> <span class="title">IWhatWangWannaDo</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sayWord</span><span class="params">(String word)</span> </span>&#123;</span><br><span class="line">        System.out.println(String.format(<span class="string">"王二说：%s"</span>, word));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>头套：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HeadGearProxy</span> <span class="keyword">implements</span> <span class="title">IWhatWangWannaDo</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Wang wang;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 可以理解为戴在了王二的头上</span></span><br><span class="line">    <span class="comment">// 以便于控制王二</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">HeadGearProxy</span><span class="params">(Wang wang)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.wang = wang;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sayWord</span><span class="params">(String word)</span> </span>&#123;</span><br><span class="line">        String hornedWord = hornWord(word);</span><br><span class="line">        wang.sayWord(hornedWord);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 用于对王二的话进行润色</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> word 王二要说的话</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 润色后的话</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">hornWord</span><span class="params">(String word)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!word.equals(<span class="string">"你一定是喜欢我吧？"</span>))</span><br><span class="line">            <span class="keyword">return</span> <span class="string">"今晚月色真美"</span>;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="keyword">return</span> <span class="string">"明天见"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当我们开始故事之后：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Story</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 从前有个人叫王二</span></span><br><span class="line">        Wang wang = <span class="keyword">new</span> Wang();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 王二带上了头套</span></span><br><span class="line">        HeadGearProxy headGearProxy = <span class="keyword">new</span> HeadGearProxy(wang);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 旁白</span></span><br><span class="line">        System.out.println(<span class="string">"王二想说：你怕是喜欢我吧？"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 头套帮王二对话语进行了润色</span></span><br><span class="line">        <span class="comment">// 但真正说话的人还是王二</span></span><br><span class="line">        headGearProxy.sayWord(<span class="string">"你怕是喜欢我吧？"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过代码运行，我们可以看到：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">王二想说：你怕是喜欢我吧？</span><br><span class="line">王二说：今晚月色真美</span><br></pre></td></tr></table></figure>
+
+<p>从代码里，我们也在此看到了头套只是一个处理语言的代理角色，真正说话的人仍然是王二。这也就是代理模式的本质。<strong>代理者在委托人执行真实操作之前货或之后进行其他与委托人代码逻辑不相关的一些操作，同时，执行这些操作时，并不影响委托人原本的代码情况</strong>。</p>
+<h2 id="动态代理模式"><a href="#动态代理模式" class="headerlink" title="动态代理模式"></a>动态代理模式</h2><p>现在我们了解了静态代理模式，那么进一步了解动态代理模式也就水到渠成。不过，现在还不能直接说动态代理，因为王二的故事还要继续。</p>
+<p>话说，在王二追求到心仪女子之后，他的胃口也越来越到，并不仅限于搭讪，坑蒙拐骗的计俩，他都于要求头套帮他完成。而头套似乎不堪重负，再也没有听完他的需求之后，飘到他的脑袋上了。这可急坏了王二，他赶紧跑到了无大师那里，问他怎么回事。大师看了看头套，笑着对他说，“心仪之人已入怀中，又何必再求其施舍？”。王二急忙奉上烤鸡，外加五十两的银票。大师不紧不慢的把烤鸡吃了，却把银票还给了王二。大师从兜里掏出了一张人皮，对王二说道，“他可以满足你的一切需要，你穿上他，他会知道你的想法，直接替你完成，不用你再和他交代什么了，只是不要被他引往歧途。”王二谢过到大师，直接把人皮套在了自己身上，从那之后，王二通过坑蒙拐骗，夺得腰缠万贯。</p>
+<p>故事有挤牙膏一样挤出来一小段，但这一小段就足以把动态代理理解了。<strong>动态代理相比于静态代理，其实只是实现代理的方式不同，静态代理之所以静态，就是代理者本身需要对需求接口进行实现，而动态代理，则不然，他将整个需求接口反射为类，并将委托人对象传入代理类，通过反射的原理获取到真实执行委托人方法的对象</strong>。动态代理主要的几个关键点是：委托者、代理者、需求接口、反射调用方法的接口。首先，王二仍然是委托者，其次，人皮则为代理者，其三，王二的所想要做的事则仍然是需求接口，最后，人皮通过读取王二想法的过程可以理解为动态代理接口InvocationHandler通过反射调用需求方法的过程。</p>
+<p>好了，同样的，我们还是用代码再来演绎一遍这个故事吧。</p>
+<p>王二心中想做的事：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public interface IWhatWangWannaDo &#123;</span><br><span class="line">    /**</span><br><span class="line">     * 说话</span><br><span class="line">     * @param word 说的内容</span><br><span class="line">     */</span><br><span class="line">    void sayWord(String word);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>王二这个人：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public class Wang implements IWhatWangWannaDo &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void sayWord(String word) &#123;</span><br><span class="line">        System.out.println(String.format(&quot;王二说：%s&quot;, word));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>人皮：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">import java.lang.reflect.InvocationHandler;</span><br><span class="line">import java.lang.reflect.Method;</span><br><span class="line"></span><br><span class="line">public class SkinProxy implements InvocationHandler &#123;</span><br><span class="line">    private Object object;</span><br><span class="line"></span><br><span class="line">    // 可以理解为把人皮穿在了王二身上</span><br><span class="line">    public SkinProxy(Object object) &#123;</span><br><span class="line">        this.object = object;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 用于对王二的话进行润色</span><br><span class="line">     * @param word 王二要说的话</span><br><span class="line">     * @return 润色后的话</span><br><span class="line">     */</span><br><span class="line">    public String hornWord(String word)&#123;</span><br><span class="line">        if (word.equals(&quot;其实这个一文不值&quot;))</span><br><span class="line">            return &quot;童叟无欺，价值千金百两&quot;;</span><br><span class="line">        else</span><br><span class="line">            return &quot;最低五十两&quot;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public Object invoke(Object o, Method method, Object[] objects) throws Throwable &#123;</span><br><span class="line">        objects[0] = hornWord((String) objects[0]);</span><br><span class="line">        return method.invoke(object, objects);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当我们开始故事之后：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public class Story &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        // 穿上人皮</span><br><span class="line">        SkinProxy proxyIpProcessor = new SkinProxy(new Wang());</span><br><span class="line"></span><br><span class="line">        // 人皮读取了王二的思想</span><br><span class="line">        IWhatWangWannaDo whatWangWannaDo = (IWhatWangWannaDo) Proxy.newProxyInstance(IWhatWangWannaDo.class.getClassLoader(), new Class[] &#123;IWhatWangWannaDo.class&#125;, proxyIpProcessor);</span><br><span class="line"></span><br><span class="line">        // 执行王二的需求最终说话的人仍然是王二</span><br><span class="line">        System.out.println(&quot;王二想说：其实这个一文不值&quot;);</span><br><span class="line">        whatWangWannaDo.sayWord(&quot;其实这个一文不值&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过运行代码，我们可以看到：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">王二想说：其实这个一文不值</span><br><span class="line">王二说：童叟无欺，价值千金百两</span><br></pre></td></tr></table></figure>
+
+<p>经过润色后的话语，总是令人信服却又多了许多的虚伪。通过代码，我们可以从实现的接口来区分动态代理和静态代理，动态代理代理类实现的是Java反射包下的InvocationHandler接口，而静态代理则是普通的需求接口。正是因为这两个接口的思想不同，所以，使得动态代理能够在运行时再去通过反射获取真实执行委托类的方法，并在invoke()方法里进行调用。从故事里我们也可以得知，因为人皮这个代理者并不需要去主动听王二讲需求(不用实现需求接口)，而是通过读取王二的思想了解需求，所以人皮其实也是可以被其他人所使用的，其方法和过程同王二相同。动态代理的作用也是如此，当有多个委托者类，同时都有相同的需求接口时，可以通过同一个代理类对其进行动态调用，而不需要重复实现多个代理类区分别代理他们。这样大大简化了开发流程，同样，在Spring框架中也能够发光发热。如果真的理解了动态代理，那么对于理解依赖注入(IoC)/控制反转(DI)这两个概念也会更容易。</p>
+<h2 id="动态代理的作用"><a href="#动态代理的作用" class="headerlink" title="动态代理的作用"></a>动态代理的作用</h2><p>动态代理在我们真实开发环境中其实应用不会太多，而对于框架的设计与开发则十分重要，在这里由于本人技术的限制就简单把网上冲浪来的几种用途进行总结吧。</p>
+<ul>
+<li>添加日志</li>
+<li>权限控制</li>
+<li>加验证</li>
+<li>Spring AOP核心思想</li>
+</ul>
+<p>对于开发和实际应用中是如何进行动态代理使用的，主要分为两种途径。</p>
+<ul>
+<li>Java反射包中的InvocationHandler接口。这种使用方式主要针对委托对象拥有需求接口，这样反射才能够正常的被使用。</li>
+<li>CGLib库。这种方式应用于委托类并没有实现需求接口，而代理类是通过CGLib在底层实现了类的继承从而进行动态代理，这个在Spring中应用广泛。</li>
+</ul>
+<p>这两者的效率在高版本中已经相差甚小，低版本中CGLib占有绝对的优势，不过这两者应用的场景不同，所以，不能单从效率这个角度出发去分析。</p>
+<h2 id="尾声"><a href="#尾声" class="headerlink" title="尾声"></a>尾声</h2><p>关于动态代理的总结到这里也就结束了，通篇来看，对于动态代理的认识相比三年前有所提升，但仍有许多不足，经验和学习都还有所欠缺。希望三年之后，又会有全新的收获。</p>
+<p>且慢，对于虽然技术是讲完了，但是我们的故事还没有结尾。王二究竟会有何种结局？结局的内容和我们今天所讨论的技术并无关联，现在就让我们来看看……王二自从穿上了人皮之后，从一个普通百姓变成了富甲一方的商人。王二本以为抱得美人归加之腰缠万贯就是他后半生的宿命。可谁知，他醉生梦死的后一天造成，人皮竟然自己有了血肉之躯，可以直接拿王二声音说话，由王二的所有特点。等王二发现时，他自己已经不能说话，而且脸部被人皮腐蚀得面目全非。他很惊恐，四处寻找着人皮，终于，在自己的安乐窝看到了人皮抱着风尘女子快活的模样，他想要进去把人皮撕碎，可被自己的家丁当做是乞丐赶到了大街上。他失魂落魄的走着，无意识间竟然走到了大师的府上，大师似乎未卜先知，早已在门口等候。他说不出话，只能不停朝大师比划。大师只是对他轻蔑的笑了笑，手一挥，人皮就回到了大师的袋中。王二以为事情就此结束了，但从镜子中看到，自己的脸仍然没有任何的变化，同样也不能说话。但他仍然忘不了自己当初的爱人，以杂役的身份重新回到了自己的府邸，每天都可以在清晨瞥到爱人打开窗户，那样的芳容仍然令他留恋。府上的人都以为这个府邸真正的主人另有其人，所以对于王二的消失只口不提。王二的爱人也就像王二从未出现过一般，从未谈及过王二的消失。每天结束工作的王二躺在床上，在昏昏欲睡时，他仿佛从镜中看到了另一个人，他在想自己究竟是不是王二，又或许自己其实才是人皮，而真正的自己早已落入了大师的口袋？</p>
+
+    </div>
+
+    
+    
+    
+	
+	<div> <div> <div style="text-align:center;color:#bfbfbf;font-size:16px;"> <span>-------- 本文结束 </span> <i class="fa fa-paw"></i> <span> 感谢阅读 --------</span> </div> </div> </div>
+	<div>
+    
+        
+    
+	</div>
+        <div class="reward-container">
+  <div></div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.jpg" alt="旭仔 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.jpg" alt="旭仔 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>旭仔
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://yoursite.com/2020/08/13/java动态代理/" title="java动态代理">http://yoursite.com/2020/08/13/java动态代理/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/java/" rel="tag"><i class="fa fa-tag"></i> java</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/08/13/linux系统软件安装/" rel="prev" title="linux系统软件安装">
+      <i class="fa fa-chevron-left"></i> linux系统软件安装
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/08/13/SqlServer默认连接字符串/" rel="next" title="SQLServer默认连接字符串">
+      SQLServer默认连接字符串 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#卷首语"><span class="nav-number">1.</span> <span class="nav-text">卷首语</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#静态代理模式"><span class="nav-number">2.</span> <span class="nav-text">静态代理模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#动态代理模式"><span class="nav-number">3.</span> <span class="nav-text">动态代理模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#动态代理的作用"><span class="nav-number">4.</span> <span class="nav-text">动态代理的作用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#尾声"><span class="nav-number">5.</span> <span class="nav-text">尾声</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="旭仔"
+      src="/images/yangxu.jpg">
+  <p class="site-author-name" itemprop="name">旭仔</p>
+  <div class="site-description" itemprop="description">不辜负每一份热情<br/>也不讨好每一份冷漠</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xuzaiya" title="GitHub → https://github.com/xuzaiya" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/274404901@qq.com" title="E-Mail → 274404901@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="link fa-fw"></i>
+      友情链接
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://monya.co" title="http://monya.co" rel="noopener" target="_blank">小黄</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://oltremare.cc/" title="http://oltremare.cc/" rel="noopener" target="_blank">大戴</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://zengyangcloud.com/" title="https://zengyangcloud.com/" rel="noopener" target="_blank">曾🐏</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://9dtrrn.coding-pages.com/" title="http://9dtrrn.coding-pages.com/" rel="noopener" target="_blank">GEC</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">
+  
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yangxu</span>
+</div>
+
+
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              leancloudSelector(url).innerText = 'Counter not initialized! More info at console err msg.';
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"SodJt8SkMxqIhIFnHz50p1I9-gzGzoHsz","app_key":"x0AqxoJLrMJEDQRD4CQngS3j","server_url":null,"Dependencies":"https://github.com/theme-next/hexo-leancloud-counter-security","security":true,"betterPerformance":true};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'SodJt8SkMxqIhIFnHz50p1I9-gzGzoHsz',
+      appKey     : 'x0AqxoJLrMJEDQRD4CQngS3j',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+    <!-- 页面点击小红心 -->
+    <script type="text/javascript" src="/js/clicklove.js"></script>
+
+
+</html>

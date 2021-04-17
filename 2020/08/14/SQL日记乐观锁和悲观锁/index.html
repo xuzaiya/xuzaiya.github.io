@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="序本来对理性世界里的代码总是夹杂着崇敬的心，因为它们看起来总是绝对的正确和感性。但自从看到乐观和悲观用于形容SQL中的锁之后，一切都有所变化。它们好像也有喜怒哀乐，也会感性，也会极端，还会不开心。我想看看它们的开心和不开心，看看它们发生了什么事，让绝对理性的事物竟然染上了人类独有的情感。最近看了几本小说，想试着用半比喻的形式对乐观、悲观锁两个概念进行阐述。">
+<meta name="keywords" content="SQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SQL日记乐观锁和悲观锁">
+<meta property="og:url" content="http://yoursite.com/2020/08/14/SQL日记乐观锁和悲观锁/index.html">
+<meta property="og:site_name" content="xuzai&#39;s Blog">
+<meta property="og:description" content="序本来对理性世界里的代码总是夹杂着崇敬的心，因为它们看起来总是绝对的正确和感性。但自从看到乐观和悲观用于形容SQL中的锁之后，一切都有所变化。它们好像也有喜怒哀乐，也会感性，也会极端，还会不开心。我想看看它们的开心和不开心，看看它们发生了什么事，让绝对理性的事物竟然染上了人类独有的情感。最近看了几本小说，想试着用半比喻的形式对乐观、悲观锁两个概念进行阐述。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2021-04-12T05:08:00.850Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SQL日记乐观锁和悲观锁">
+<meta name="twitter:description" content="序本来对理性世界里的代码总是夹杂着崇敬的心，因为它们看起来总是绝对的正确和感性。但自从看到乐观和悲观用于形容SQL中的锁之后，一切都有所变化。它们好像也有喜怒哀乐，也会感性，也会极端，还会不开心。我想看看它们的开心和不开心，看看它们发生了什么事，让绝对理性的事物竟然染上了人类独有的情感。最近看了几本小说，想试着用半比喻的形式对乐观、悲观锁两个概念进行阐述。">
+
+<link rel="canonical" href="http://yoursite.com/2020/08/14/SQL日记乐观锁和悲观锁/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>SQL日记乐观锁和悲观锁 | xuzai's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+
+	<link rel="stylesheet" href="/dist/APlayer.min.css">
+	<div id="aplayer"></div>
+	<script type="text/javascript" src="/dist/APlayer.min.js"></script>
+	<script type="text/javascript" src="/dist/music.js"></script>
+
+	
+
+
+
+  <div class="container use-motion">
+    
+	
+	
+	<a href="https://github.com/xuzaiya?tab=repositories" class="github-corner" aria-label="View source on GitHub">
+	<svg width="80" height="80" viewBox="0 0 250 250" style="fill:#64CEAA; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true">
+	<path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z">
+	</path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+	<style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+	
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">xuzai's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">学海无涯，回头是岸！</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-作者">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>作者</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">11</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">22</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">23</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/14/SQL日记乐观锁和悲观锁/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/yangxu.jpg">
+      <meta itemprop="name" content="旭仔">
+      <meta itemprop="description" content="不辜负每一份热情<br/>也不讨好每一份冷漠">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xuzai's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SQL日记乐观锁和悲观锁
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-08-13 16:24:42" itemprop="dateCreated datePublished" datetime="2020-08-13T16:24:42Z">2020-08-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-12 05:08:00" itemprop="dateModified" datetime="2021-04-12T05:08:00Z">2021-04-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/SQL/" itemprop="url" rel="index"><span itemprop="name">SQL</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/SQL/SQL基础知识/" itemprop="url" rel="index"><span itemprop="name">SQL基础知识</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/08/14/SQL日记乐观锁和悲观锁/" class="post-meta-item leancloud_visitors" data-flag-title="SQL日记乐观锁和悲观锁" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/08/14/SQL日记乐观锁和悲观锁/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/08/14/SQL日记乐观锁和悲观锁/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="序"><a href="#序" class="headerlink" title="序"></a>序</h2><p>本来对理性世界里的代码总是夹杂着崇敬的心，因为它们看起来总是绝对的正确和感性。但自从看到乐观和悲观用于形容SQL中的锁之后，一切都有所变化。它们好像也有喜怒哀乐，也会感性，也会极端，还会不开心。我想看看它们的开心和不开心，看看它们发生了什么事，让绝对理性的事物竟然染上了人类独有的情感。最近看了几本小说，想试着用半比喻的形式对乐观、悲观锁两个概念进行阐述。</p>
+<h2 id="我是锁"><a href="#我是锁" class="headerlink" title="我是锁"></a>我是锁</h2><h3 id="锁的独白"><a href="#锁的独白" class="headerlink" title="锁的独白"></a>锁的独白</h3><p>我是锁，我存在于这个世上已久。人们会用我来保护他们的心头爱，不管是好是坏，我都照单全收，从不拒绝。自从计算机问世，用的人成几何倍数增长，我也以数字化的形式进入到了二进制的世界里。用二进制的形式来保卫二进制。不论以什么样的形式存在，被我保护的东西都会原封不动。至少，不会让和主人同等级别的人有机会趁虚而入对其做手脚。别人想要看到我保护的东西，就必须和主人申请，钥匙也好，申明也罢。我一直就是这样。不过，主人的要求越来越奇怪，我是一个绝对的锁，不允许我的世界里出现模棱两可的东西。我向主人抱怨，希望他不要破坏我的世界观，他总是需求是这样，我也没办法啊。我越想越气。我突然发现，我也有了情绪，变得有点奇怪。</p>
+<h3 id="锁的定义"><a href="#锁的定义" class="headerlink" title="锁的定义"></a>锁的定义</h3><p>锁，又名Lock。人尽皆知，但今天要聊的不是锁门的也不是怎么撬锁。只说说程序员天天交到的数据库里的锁。从锁的字面意思就知道，他是保证安全的，外面的人进不来，里面的人出不去。这里的人其实是数据，锁在数据库只做一件事，<strong>保证数据的一致性</strong>。也就是，哪怕千军万马都急着用锁保护的东西，那么，也要有个先来后到，一个一个来。这样保证了数据在任意时刻只会右一个线程进行操作，从而不会导致数据读取和写入的不准确。</p>
+<h2 id="乐观和悲观"><a href="#乐观和悲观" class="headerlink" title="乐观和悲观"></a>乐观和悲观</h2><h3 id="感性的锁"><a href="#感性的锁" class="headerlink" title="感性的锁"></a>感性的锁</h3><p>主人在不停的灌输给我，作为一个锁，除了黑白两面之外，也应该带点灰。就像主人写的代码，有人会说好，有人会说辣鸡，也会有人说还行。这也让我有了一点感觉。就算在二进制的世界里，你碰见的都是0和1，但也有轻重缓急之分。有的0不急，说你慢慢来，只要安全就可以了。也有的1很着急，说搞快点，慢了下次就没我的饭吃了。如果我都用同一个自己去面对所有的0和1，那么我一定活不到下一次版本更新。于是，我瞧瞧做了两个我的分身，他们和我都拥有同样的管控权利，只是按照0和1还有代码的需求，他们有了自己的性格，或者说我用人类的情绪强化了他们，让他们用人类的情绪和思维方式来控制我们保护的数据。</p>
+<h3 id="为什么要悲观和乐观"><a href="#为什么要悲观和乐观" class="headerlink" title="为什么要悲观和乐观"></a>为什么要悲观和乐观</h3><p>应用的场景不同，需要的人性格也有所不同，需要励志和激情的时候，你要是找个闷灌，可能你就完蛋了。程序也是如此，如果程序等着对数据进行访问(读操作多),而进行更新操作的情况较少，那么，我们不必把锁的管控做的过于严苛，让锁和乐观的人一样自信且坚定的相信所见即真实。简言之，<strong>读多写少，这是乐观锁的工作场景</strong>。这样做，则能够保证所有程序可以在同一时刻都读取数据，而更新数据时，<strong>仅根据数据版本、更新时间来对数据的实时性进行验证，并不会对同时有几个人在进行写操作进行限制</strong>。这里需要提一下<strong>乐观锁的实现方式，一般采用CAS(Compare and Swap)来实现，对于内存中的某一个值V，提供一个旧值A和一个新值B。如果提供的旧值V和A相等就把B写入V，这个过程是原子性的。</strong></p>
+<p>如果你遇到了一些严谨的工作，那么，找一个理性且带有悲观主义色彩的人来做，会更靠谱一些。因为很多时候，他们更倾向于相信事件会朝着坏的方向发展。程序在一些注重数据准确性而非效率的场景出现时，使用悲观锁是有必要的。虽然，他们每次都会保证数据在被一个线程写，但这也会拖慢整个程序的效率。<strong>写多读少，是悲观锁的工作场景</strong>。</p>
+<h2 id="乐观锁和悲观锁家族"><a href="#乐观锁和悲观锁家族" class="headerlink" title="乐观锁和悲观锁家族"></a>乐观锁和悲观锁家族</h2><h3 id="乐观锁和悲观锁的对话"><a href="#乐观锁和悲观锁的对话" class="headerlink" title="乐观锁和悲观锁的对话"></a>乐观锁和悲观锁的对话</h3><p>乐观锁:”现在的数据人们都懂得怎么使用和安排了，想开点老兄，管理好你现在的数据就好，不要太干涉0和1自身的操作了。”</p>
+<p>悲观锁:”你说的轻松。如果出现了忒休斯之船的问题，你怎么办。所以说，保险起见，还是要对这些数据的操作进行严格的把关，想要操作数据，就必须一个一个来！”</p>
+<p>于是，悲观锁像锁一样，创造了排它锁和共享锁，帮他分担严格管控数据的工作。</p>
+<p>顾名思义，排它锁成了仓库的老大，严格按照先来后到，让数据保证每次只接触到一个指令。</p>
+<p>而共享锁稍微温柔一些，他还是允许大家一起访问，但是，在写数据时，严格遵守先来后到的规矩。</p>
+<h3 id="排他锁和共享锁"><a href="#排他锁和共享锁" class="headerlink" title="排他锁和共享锁"></a>排他锁和共享锁</h3><p>排它锁使用时，按照线程上锁的顺序，对资源进行管控，如果一个线程为资源上了排它锁，那么，其他的线程<strong>既不能读取数据也不能写入数据，同时其他线程无法再为该资源添加其他锁</strong>，直到线程使用结束。</p>
+<p>共享锁使用时，则<strong>可以同时读取数据，但只能单个线程写入数据，允许其他线程为该资源加共享锁，但不能加排它锁</strong>。</p>
+<h2 id="转折"><a href="#转折" class="headerlink" title="转折"></a>转折</h2><h3 id="意外的死锁"><a href="#意外的死锁" class="headerlink" title="意外的死锁"></a>意外的死锁</h3><p>打起来了，打起来了。0和1们纷纷到仓库看热闹，只见两把锁纠缠在一起，0和1们需要访问的数据都被各自保护，各自无法进入想要访问的数据里去。这是锁出来，对没错就是开头的那把锁，在计算机世界里，他算是所有锁的神。</p>
+<p>他问：”你们为何要为难各自的访问者？”</p>
+<p>两把扭打着的锁说着:”他们的人要抢我保护的数据！”</p>
+<p>锁沉默了，思索片刻。他问：”是不是你们两个各自保护的东西，在各自主人还未使用完之后，又强行被各自的主人霸占了，而主人又想用对方的东西？”</p>
+<p>他们一口同声的说：”对！”</p>
+<p>于是，锁笑了笑，把他们拆开，结束了这次的操作。</p>
+<h3 id="为什么是死锁"><a href="#为什么是死锁" class="headerlink" title="为什么是死锁"></a>为什么是死锁</h3><p>死锁的原理其实很简单，两把锁各自保护的东西在两个线程操作时，发生了重叠。可以理解为，A线程在使用A资源，同时又准备使用B资源，而B线程正在使用B资源，同时准备使用A资源。那么，彼此线程都不能得到满足，因为A和B资源都被占用了，那么A和B线程就没办法正常结束，所以，所有线程都没有办法正常的对资源进行使用。</p>
+<h3 id="怎么解决"><a href="#怎么解决" class="headerlink" title="怎么解决"></a>怎么解决</h3><p>解决死锁最简单的方法就是：<strong>不要贪心</strong>，在一个线程或者一个事务里不要想着占用所有的资源，不要把所有耗时的操作都放在一个线程或事务里处理并且使用的资源又都是被高频使用的。其次就是，<strong>对同一个资源尽量设计同样的访问步骤</strong>，保证每个到达资源所需要的耗时相近，以便于给上一个线程留出时间差进行处理。</p>
+<h2 id="尾"><a href="#尾" class="headerlink" title="尾"></a>尾</h2><p>锁成为了神，他也具备了一些人类独有的情感，他不在执著是非。他也开始相信存在即合理。</p>
+
+    </div>
+
+    
+    
+    
+	
+	<div> <div> <div style="text-align:center;color:#bfbfbf;font-size:16px;"> <span>-------- 本文结束 </span> <i class="fa fa-paw"></i> <span> 感谢阅读 --------</span> </div> </div> </div>
+	<div>
+    
+        
+    
+	</div>
+        <div class="reward-container">
+  <div></div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.jpg" alt="旭仔 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.jpg" alt="旭仔 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>旭仔
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://yoursite.com/2020/08/14/SQL日记乐观锁和悲观锁/" title="SQL日记乐观锁和悲观锁">http://yoursite.com/2020/08/14/SQL日记乐观锁和悲观锁/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/SQL/" rel="tag"><i class="fa fa-tag"></i> SQL</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/08/13/SQL必会知识/" rel="prev" title="SQL必会知识点">
+      <i class="fa fa-chevron-left"></i> SQL必会知识点
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/08/14/java发送HTTP请求的坑/" rel="next" title="java发送HTTP请求">
+      java发送HTTP请求 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#序"><span class="nav-number">1.</span> <span class="nav-text">序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#我是锁"><span class="nav-number">2.</span> <span class="nav-text">我是锁</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#锁的独白"><span class="nav-number">2.1.</span> <span class="nav-text">锁的独白</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#锁的定义"><span class="nav-number">2.2.</span> <span class="nav-text">锁的定义</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#乐观和悲观"><span class="nav-number">3.</span> <span class="nav-text">乐观和悲观</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#感性的锁"><span class="nav-number">3.1.</span> <span class="nav-text">感性的锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么要悲观和乐观"><span class="nav-number">3.2.</span> <span class="nav-text">为什么要悲观和乐观</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#乐观锁和悲观锁家族"><span class="nav-number">4.</span> <span class="nav-text">乐观锁和悲观锁家族</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#乐观锁和悲观锁的对话"><span class="nav-number">4.1.</span> <span class="nav-text">乐观锁和悲观锁的对话</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#排他锁和共享锁"><span class="nav-number">4.2.</span> <span class="nav-text">排他锁和共享锁</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#转折"><span class="nav-number">5.</span> <span class="nav-text">转折</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#意外的死锁"><span class="nav-number">5.1.</span> <span class="nav-text">意外的死锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么是死锁"><span class="nav-number">5.2.</span> <span class="nav-text">为什么是死锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#怎么解决"><span class="nav-number">5.3.</span> <span class="nav-text">怎么解决</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#尾"><span class="nav-number">6.</span> <span class="nav-text">尾</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="旭仔"
+      src="/images/yangxu.jpg">
+  <p class="site-author-name" itemprop="name">旭仔</p>
+  <div class="site-description" itemprop="description">不辜负每一份热情<br/>也不讨好每一份冷漠</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xuzaiya" title="GitHub → https://github.com/xuzaiya" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/274404901@qq.com" title="E-Mail → 274404901@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="link fa-fw"></i>
+      友情链接
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://monya.co" title="http://monya.co" rel="noopener" target="_blank">小黄</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://oltremare.cc/" title="http://oltremare.cc/" rel="noopener" target="_blank">大戴</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://zengyangcloud.com/" title="https://zengyangcloud.com/" rel="noopener" target="_blank">曾🐏</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://9dtrrn.coding-pages.com/" title="http://9dtrrn.coding-pages.com/" rel="noopener" target="_blank">GEC</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">
+  
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yangxu</span>
+</div>
+
+
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              leancloudSelector(url).innerText = 'Counter not initialized! More info at console err msg.';
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"SodJt8SkMxqIhIFnHz50p1I9-gzGzoHsz","app_key":"x0AqxoJLrMJEDQRD4CQngS3j","server_url":null,"Dependencies":"https://github.com/theme-next/hexo-leancloud-counter-security","security":true,"betterPerformance":true};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'SodJt8SkMxqIhIFnHz50p1I9-gzGzoHsz',
+      appKey     : 'x0AqxoJLrMJEDQRD4CQngS3j',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+    <!-- 页面点击小红心 -->
+    <script type="text/javascript" src="/js/clicklove.js"></script>
+
+
+</html>

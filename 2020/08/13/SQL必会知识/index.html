@@ -1,0 +1,1733 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="引言写成一句SQL很容易，但完全手打却还是有些困难。这个文章作为拾遗，把一些常用的语法和常识都放在一起，以供翻阅。参考的书籍为SQL CookBook。">
+<meta name="keywords" content="SQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SQL必会知识点">
+<meta property="og:url" content="http://yoursite.com/2020/08/13/SQL必会知识/index.html">
+<meta property="og:site_name" content="xuzai&#39;s Blog">
+<meta property="og:description" content="引言写成一句SQL很容易，但完全手打却还是有些困难。这个文章作为拾遗，把一些常用的语法和常识都放在一起，以供翻阅。参考的书籍为SQL CookBook。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://oltremare.cc/2019/11/27/SQL%E6%97%A5%E8%AE%B0-SQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/Join%E5%9B%BE%E7%A4%BA.png">
+<meta property="og:image" content="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAAEsCAMAAABOo35HAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAC9UExURVlZWdPT07KysmRkZIWFhfT09JmZmWZmZm9vb39/fxkZGUxMTDMzM3p6epCQkKamppubm729venp6cjIyN7e3tbW1s/Pz8LCwnx8fLS0tFZWVoiIiI+Pj6GhoeTk5Glpabu7u93d3evr66CgoJSUlKqqqsnJyeDg4Hd3d8PDw+Xl5bi4uNHR0dvb26Ojo6urq+fn51hYWDg4OCgoKHBwcK2traenp0FBQe7u7vHx8U5OTre3t8zMzHV1df///7GrnpQAAAA/dFJOU///////////////////////////////////////////////////////////////////////////////////AI4mfBcAAAUGSURBVHja7NoJb6M4GMZxY0NCD64kve/pMZ2d3Z297+X7f6zFNmBAMUXa6URl/q9UJSWPUPzrizFWRUlNLgEBWGCBBRZYYEEAFlhggQUWWBCABRZYYIEFFgRggQUWWGCBBQFYYIEFFlhgQQAWWGCBBRZYEIAFFlhggQUWBGCBBRZYYIEFAVhggQUWWGBBABZYYIEFFlgQgAUWWGCBBRYEYIEFFlhggQUBWGCBBRZYYEEAFlhggQUWWBCABRZYYIEFFgRggQUWWGCBBQFYYIEFFlhgQQAWWGCBBRZYEIAFFlhggQUWBGCBBRZYn6cCIcRXgvX/h9qcIVBqDdbEM8RCxGCB9QqXYRwHYDHBgwXWl8eKZKiESHI3Ba1kWs3fKixcaJUl1YyeBm7Ocq+yLItUiVBGnXxenSHJolIKEcwHq6ikbOX1YGVzQCTN8LPmSLreghUl9sN4Uw7yajMrLC0TZ1ImzqY6FEop0+pIaEN5HaoOxVuwEqFyc4I46uSlzOLqgxlh6UaR9l3VYWl9Fdoxb1Q90KJtu41pwwFW/WHhTtW8i7TafLCqRsk6bsGw63L9qurXRmuIlbT9lDQnlXU+nBFW1Q2qnZbDprWa2tjR90LZFqx1/+Td/HpGWLlrLDvIwTcx6dQ1Vrntbig68cDms3JwbA5Y1azs1ger6sNV/bbIw1jU81MvNAGrl58RVn8ozW+btF08iGFoAlYvP3csfVur1gJBEIA1uBmue5dhZDOyO2epbmgCVi8/I6x0MMHH9pjsTfBhNzQBq5uPZoQlB0uH3DZG4EZqQ26fL3sZq5uf09Ih6qw3i/pm6BZO0qZX7rrUS68Xsbr5ZE4rePMk08pk9aUZugfqppvs6AM1Acvlo/StP+6EbW06z8hJqxbYp2BZPQUnFsLsKuhQdaHqn5ewbF7KXIn0jWO5MqOQ7RaNLPtbNMmmhimj0GUmYLl8Gs0Lq4wyPbTu1l2QKqHSouzs3OlDIslW5SQsnY/NXmFplyNvEuuLV/Tau9BzwiraDUSwXmysztYWWNtL1psXeumgIrDGaqXvBfUuvtqUYI3V2t1wk1e2msFluJJm6zDJXv/fIfjPP7DAAgsssCiwwAILLLDAosACCyywwAKLAgsssMACC6zt9fDz/v75tyOB+98PD2+ORgKffjw4OP1uJPDxl+Xy8v1I4MPF3t7VNyOB4/vF4uzdzrG+39f1kz/w66Guv/yBvw90KX/gZKkr8Qf+2dOV+gNHC12/7RxrabD2/a31bLAO/a11YbAO/K21MFhLf2s9Gqw9f2vdGqzFu11jnVusE2/gxmI9eQOnFuvYG7i0WH7uK4t15w2cWazrXWP9a7H8f/bQYvm/6IPF+sF/pVssf19Ii/WH/0K2WH/uGuvEWC39gSdj9Twy+Rqri5EZx1gt/IE7Y/XoD1wbq9vd3w1PlufnD2OBp+ebm/uxwPHF6emnscDR4vLy41jg7vHq6sNY4Pr27OyYdRaLUrDAAosCCyywwAILLAossMACCyywKLDAAgsssMCiwAILLLDAAosCCyywwAILLAossMACCyywKLDAAgsssMCiwAILLLDAAosCCyywwAILLAossMACCyywKLDAAgsssMCiwAILLLDAAosCCyywwAILLAossMACCyywKLDAAgsssMCiwAILLLDAAosCCyywwAILLAossMACCyywKLDAAgsssL6u+k+AAQCR9eHtLKvLfwAAAABJRU5ErkJggg==">
+<meta property="og:updated_time" content="2021-04-12T05:07:29.890Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SQL必会知识点">
+<meta name="twitter:description" content="引言写成一句SQL很容易，但完全手打却还是有些困难。这个文章作为拾遗，把一些常用的语法和常识都放在一起，以供翻阅。参考的书籍为SQL CookBook。">
+<meta name="twitter:image" content="http://oltremare.cc/2019/11/27/SQL%E6%97%A5%E8%AE%B0-SQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/Join%E5%9B%BE%E7%A4%BA.png">
+
+<link rel="canonical" href="http://yoursite.com/2020/08/13/SQL必会知识/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>SQL必会知识点 | xuzai's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+
+	<link rel="stylesheet" href="/dist/APlayer.min.css">
+	<div id="aplayer"></div>
+	<script type="text/javascript" src="/dist/APlayer.min.js"></script>
+	<script type="text/javascript" src="/dist/music.js"></script>
+
+	
+
+
+
+  <div class="container use-motion">
+    
+	
+	
+	<a href="https://github.com/xuzaiya?tab=repositories" class="github-corner" aria-label="View source on GitHub">
+	<svg width="80" height="80" viewBox="0 0 250 250" style="fill:#64CEAA; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true">
+	<path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z">
+	</path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+	<style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+	
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">xuzai's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">学海无涯，回头是岸！</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-作者">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>作者</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">11</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">22</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">23</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/13/SQL必会知识/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/yangxu.jpg">
+      <meta itemprop="name" content="旭仔">
+      <meta itemprop="description" content="不辜负每一份热情<br/>也不讨好每一份冷漠">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xuzai's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SQL必会知识点
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-08-13 09:02:42" itemprop="dateCreated datePublished" datetime="2020-08-13T09:02:42Z">2020-08-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-12 05:07:29" itemprop="dateModified" datetime="2021-04-12T05:07:29Z">2021-04-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/SQL/" itemprop="url" rel="index"><span itemprop="name">SQL</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/SQL/SQL基础知识/" itemprop="url" rel="index"><span itemprop="name">SQL基础知识</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/08/13/SQL必会知识/" class="post-meta-item leancloud_visitors" data-flag-title="SQL必会知识点" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/08/13/SQL必会知识/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/08/13/SQL必会知识/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>写成一句SQL很容易，但完全手打却还是有些困难。这个文章作为拾遗，把一些常用的语法和常识都放在一起，以供翻阅。参考的书籍为<a href="https://book.douban.com/subject/2297146//" target="_blank" rel="noopener"><em>SQL CookBook</em></a>。</p>
+<h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><h3 id="字段别名作用域"><a href="#字段别名作用域" class="headerlink" title="字段别名作用域"></a>字段别名作用域</h3><p>为字段取别名将在WHERE语句执行后才生效，但如果是子查询，则外部查询可以直接使用子查询别名；</p>
+<p>正确示例：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> empolyee_salary</span><br><span class="line"><span class="keyword">FROM</span> (<span class="keyword">SELECT</span> <span class="keyword">id</span>, <span class="keyword">SUM</span>(salary) <span class="keyword">AS</span> empolyee_salary</span><br><span class="line">      <span class="keyword">FROM</span> employee_salary</span><br><span class="line">      <span class="keyword">GROUP</span> <span class="keyword">BY</span> <span class="keyword">id</span>)</span><br><span class="line"><span class="keyword">WHERE</span> empolyee_salary &gt; <span class="number">1000</span></span><br></pre></td></tr></table></figure>
+
+<p>错误示例：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> book_name <span class="keyword">AS</span> book</span><br><span class="line"><span class="keyword">FROM</span> books</span><br><span class="line"><span class="keyword">WHERE</span> book = <span class="string">'1'</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="字符串拼接"><a href="#字符串拼接" class="headerlink" title="字符串拼接"></a>字符串拼接</h3><p>拼接字符串，SQL Server使用 <code>+</code> 即可，MySQL使用CONCAT函数；</p>
+<p>SQL Server</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> book + <span class="string">'|'</span> + author</span><br><span class="line"><span class="keyword">FROM</span> books</span><br></pre></td></tr></table></figure>
+
+<p>MySQL</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">CONCAT</span>(book, <span class="string">'|'</span>, author)</span><br><span class="line"><span class="keyword">FROM</span> books</span><br></pre></td></tr></table></figure>
+
+<h3 id="CASE-WHEN用法"><a href="#CASE-WHEN用法" class="headerlink" title="CASE WHEN用法"></a>CASE WHEN用法</h3><p>SELECT中使用条件逻辑CASE返回对应的固定值，类似于Java中的Switch-Case语法；</p>
+<p>通用</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> student_id,</span><br><span class="line">       <span class="keyword">CASE</span> <span class="keyword">WHEN</span> grade &gt; <span class="number">60</span> <span class="keyword">THEN</span> <span class="string">'及格'</span></span><br><span class="line">       <span class="keyword">CASE</span> <span class="keyword">WHEN</span> grade &gt; <span class="number">80</span> <span class="keyword">THEN</span> <span class="string">'良好'</span></span><br><span class="line">       <span class="keyword">ELSE</span> <span class="keyword">WHEN</span> grade &gt; <span class="number">90</span> <span class="keyword">THEN</span> <span class="string">'优秀'</span></span><br><span class="line">       <span class="keyword">ELSE</span> <span class="string">'不及格'</span></span><br><span class="line">       <span class="keyword">END</span> <span class="keyword">AS</span> <span class="string">'final_grade'</span></span><br><span class="line"><span class="keyword">FROM</span> grades</span><br></pre></td></tr></table></figure>
+
+<p>当然，CASE也可以用于<code>ORDER BY</code>排序，例如，经理按照月薪降序排列，其他人则升序排列</p>
+<p>通用</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> employee_id</span><br><span class="line"><span class="keyword">FROM</span> grades</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> <span class="keyword">CASE</span> <span class="keyword">WHEN</span> employee_type = <span class="string">'manager'</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="生成随机数"><a href="#生成随机数" class="headerlink" title="生成随机数"></a>生成随机数</h3><p>SQL Server使用<code>NEWID()</code>或<code>RAND()</code>,MySQL使用<code>RAND()</code>;</p>
+<p>SQL Server</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> student_name,</span><br><span class="line">       <span class="comment">-- 一次查询出来的结果随机的数字是相同的</span></span><br><span class="line">       <span class="comment">-- FLOOR为地板函数 向下取整</span></span><br><span class="line">       <span class="keyword">FLOOR</span>(<span class="keyword">RAND</span>() * <span class="number">10</span>),</span><br><span class="line">       <span class="comment">-- 不同列则随机数可能不同</span></span><br><span class="line">       <span class="comment">-- CEILING为天花板函数 向上取整</span></span><br><span class="line">       <span class="keyword">CEILING</span>(<span class="keyword">RAND</span>() * <span class="number">10</span>),</span><br><span class="line">       <span class="comment">-- NEWID()类似UUID 保证唯一</span></span><br><span class="line">       NEWID()</span><br><span class="line"><span class="keyword">FROM</span> students</span><br></pre></td></tr></table></figure>
+
+<p>MySQL</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> student_name,</span><br><span class="line">       <span class="comment">-- 会生成0-1间的小数</span></span><br><span class="line">       <span class="keyword">RAND</span>()</span><br><span class="line"><span class="keyword">FROM</span> students</span><br></pre></td></tr></table></figure>
+
+<h3 id="判断字段是否为空"><a href="#判断字段是否为空" class="headerlink" title="判断字段是否为空"></a>判断字段是否为空</h3><p>SQL Server可以用<code>ISNULL(字段, 默认值)</code>或<code>COALESCE(字段, 字段, 字段, 默认值)</code>，MySQL可以使用<code>IFNULL(字段, 默认值)</code>或<code>COALESCE(字段, 字段, 字段, 默认值)</code>;</p>
+<p>SQL Server</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> student_name,</span><br><span class="line">       <span class="comment">-- COALESCE的好处在于可以用于判断多个字段为空时的操作</span></span><br><span class="line">       <span class="keyword">COALESCE</span>(student_gender, student_info, <span class="string">'empyt'</span>),</span><br><span class="line">       <span class="comment">-- ISNULL则只能对单个进行判断</span></span><br><span class="line">       <span class="keyword">ISNULL</span>(student_gender, <span class="string">'empty'</span>)</span><br><span class="line"><span class="keyword">FROM</span> students</span><br></pre></td></tr></table></figure>
+
+<p>MySQL</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> student_name,</span><br><span class="line">       <span class="comment">-- COALESCE的好处在于可以用于判断多个字段为空时的操作</span></span><br><span class="line">       <span class="keyword">COALESCE</span>(student_gender, student_info, <span class="string">'empyt'</span>),</span><br><span class="line">       <span class="comment">-- ISNULL则只能对单个进行判断</span></span><br><span class="line">       <span class="keyword">IFNULL</span>(student_gender, <span class="string">'empty'</span>)</span><br><span class="line"><span class="keyword">FROM</span> students</span><br></pre></td></tr></table></figure>
+
+<h3 id="计算时间差"><a href="#计算时间差" class="headerlink" title="计算时间差"></a>计算时间差</h3><p>SQL Server使用<a href="https://www.w3school.com.cn/sql/func_datediff.asp" target="_blank" rel="noopener"><code>DATEDIFF(时间维度(年、天、时、分、秒), 开始日期，结束日期)</code></a>,MySQL<br>使用<a href="https://blog.csdn.net/wangyang1354/article/details/51993848" target="_blank" rel="noopener"><code>TIMESTAMPDIFF(时间维度(年、天、时、分、秒), 开始日期，结束日期)</code></a>;</p>
+<p>SQL Server</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 结果为1分钟</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">DATEDIFF</span>(mi, <span class="string">'2019-11-26 21:54:40'</span>, <span class="string">'2019-11-26 21:55:00'</span>)</span><br></pre></td></tr></table></figure>
+
+<p>MySQL</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 结果为0分钟</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">TIMESTAMPDIFF</span>(mi, <span class="string">'2019-11-26 21:54:40'</span>, <span class="string">'2019-11-26 21:55:00'</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用UNION-ALL代替UNION"><a href="#使用UNION-ALL代替UNION" class="headerlink" title="使用UNION ALL代替UNION"></a>使用<code>UNION ALL</code>代替<code>UNION</code></h3><p>尽量使用<code>UNION ALL</code>，而不使用<code>UNION</code>，因为<code>UNION</code>会对数据进行排序并进行相当于<code>DISTINC</code>的操作耗时;</p>
+<h3 id="FULL-OUTER-JOIN使用以及JOIN的关系"><a href="#FULL-OUTER-JOIN使用以及JOIN的关系" class="headerlink" title="FULL OUTER JOIN使用以及JOIN的关系"></a><code>FULL OUTER JOIN</code>使用以及JOIN的关系</h3><p><code>FULL OUTER JOIN</code>用的很少，但是也很有用——可以筛选某个表中不存在的值,通俗理解就是筛选的两个表的补集;</p>
+<p>其他JOIN的关系可以通过这个图理解：</p>
+<p><a href="http://oltremare.cc/2019/11/27/SQL%E6%97%A5%E8%AE%B0-SQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/Join%E5%9B%BE%E7%A4%BA.png" target="_blank" rel="noopener"><img src="http://oltremare.cc/2019/11/27/SQL%E6%97%A5%E8%AE%B0-SQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/Join%E5%9B%BE%E7%A4%BA.png" alt="Join图示"></a></p>
+<p><a href="http://oltremare.cc/2019/11/27/SQL%E6%97%A5%E8%AE%B0-SQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/Join%E5%9B%BE%E7%A4%BA.png" target="_blank" rel="noopener">Join图示</a></p>
+<p>通用</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> b.isbn</span><br><span class="line"><span class="keyword">FROM</span> book_infos <span class="keyword">AS</span> b</span><br><span class="line"><span class="keyword">full</span> <span class="keyword">OUTER</span> <span class="keyword">JOIN</span> outer_book <span class="keyword">AS</span> o <span class="keyword">ON</span> o.isbn = b.isbn</span><br><span class="line"><span class="comment">-- 筛选在outer_book表中不存在记录的isbn号</span></span><br><span class="line"><span class="keyword">WHERE</span> o.isbn <span class="keyword">IS</span> <span class="literal">NULL</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="OVER-函数用法"><a href="#OVER-函数用法" class="headerlink" title="OVER()函数用法"></a><code>OVER()</code>函数用法</h3><p><code>SUM/MIN/MAX...() OVER (PARTITION BY 字段)</code>可以用来进行累计统计分析和<code>GROUP BY</code>类似但不完全相同，在结果前加<code>DISTINCT</code>可以有相同的作用;</p>
+<p>通用</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 找出每种类型书籍的最低价格</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">DISTINCT</span> <span class="keyword">MIN</span>(price) <span class="keyword">OVER</span> (<span class="keyword">PARTITION</span> <span class="keyword">BY</span> book_type), book_type</span><br><span class="line"><span class="keyword">FROM</span> book</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 等价于GROUP BY</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">MIN</span>(price), book_type</span><br><span class="line"><span class="keyword">FROM</span> book</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> book_type</span><br></pre></td></tr></table></figure>
+
+<p>因为原来没有接触过，现在可以确定的一个使用场景是：对每个不同分类下的最好/最坏…进行筛选并展示。</p>
+<h3 id="字符串切片"><a href="#字符串切片" class="headerlink" title="字符串切片"></a>字符串切片</h3><p>这是常用操作，讲某个字段值从前往后切割n位，SQL Server使用<code>SUBSTRING(字段,起始位,终止位)</code>，MySQL使用<code>SUBSTR(字段,起始位,终止位)</code>，注意这里的位置是从1开始计算的;</p>
+<p>通用</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- Tom -&gt; To</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">SUBSTRING</span>(student_name, <span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line"><span class="keyword">FROM</span> students</span><br></pre></td></tr></table></figure>
+
+<h3 id="IN与EXIST的使用"><a href="#IN与EXIST的使用" class="headerlink" title="IN与EXIST的使用"></a><code>IN</code>与<code>EXIST</code>的使用</h3><p>找到一篇<a href="https://www.cnblogs.com/ztf2008/archive/2009/02/01/1381996.html" target="_blank" rel="noopener">博文</a>，博主讲的用法值得尝试，先记录，以观后效；</p>
+<p>简言之，外表数据量&gt;&gt;子查询表数据量，使用<code>IN</code>合适；<br>反之，外表数据量&lt;&lt;子查询表数据量，使用<code>EXIST</code>合适;</p>
+<h3 id="使用MERGE进行表数据的同步"><a href="#使用MERGE进行表数据的同步" class="headerlink" title="使用MERGE进行表数据的同步"></a>使用<code>MERGE</code>进行表数据的同步</h3><p>快速对表中的数据进行更新并且插入新数据——使用<code>MERGE</code>关键字，在对同数据库表进行表间数据更新的时候，使用<code>MERGE</code>可以说是最佳选择，速度很快，但是跨数据库服务器，则不能使用;</p>
+<p>关于Merge操作数据的解释<a href="http://www.sqlservertutorial.net/sql-server-basics/sql-server-merge/" target="_blank" rel="noopener">如图所示</a>：</p>
+<p><a href="http://oltremare.cc/2019/11/27/SQL%E6%97%A5%E8%AE%B0-SQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/Merge%E5%9B%BE%E7%A4%BA.png" target="_blank" rel="noopener"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAAEsCAMAAABOo35HAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAC9UExURVlZWdPT07KysmRkZIWFhfT09JmZmWZmZm9vb39/fxkZGUxMTDMzM3p6epCQkKamppubm729venp6cjIyN7e3tbW1s/Pz8LCwnx8fLS0tFZWVoiIiI+Pj6GhoeTk5Glpabu7u93d3evr66CgoJSUlKqqqsnJyeDg4Hd3d8PDw+Xl5bi4uNHR0dvb26Ojo6urq+fn51hYWDg4OCgoKHBwcK2traenp0FBQe7u7vHx8U5OTre3t8zMzHV1df///7GrnpQAAAA/dFJOU///////////////////////////////////////////////////////////////////////////////////AI4mfBcAAAUGSURBVHja7NoJb6M4GMZxY0NCD64kve/pMZ2d3Z297+X7f6zFNmBAMUXa6URl/q9UJSWPUPzrizFWRUlNLgEBWGCBBRZYYEEAFlhggQUWWBCABRZYYIEFFgRggQUWWGCBBQFYYIEFFlhgQQAWWGCBBRZYEIAFFlhggQUWBGCBBRZYYIEFAVhggQUWWGBBABZYYIEFFlgQgAUWWGCBBRYEYIEFFlhggQUBWGCBBRZYYEEAFlhggQUWWBCABRZYYIEFFgRggQUWWGCBBQFYYIEFFlhgQQAWWGCBBRZYEIAFFlhggQUWBGCBBRZYn6cCIcRXgvX/h9qcIVBqDdbEM8RCxGCB9QqXYRwHYDHBgwXWl8eKZKiESHI3Ba1kWs3fKixcaJUl1YyeBm7Ocq+yLItUiVBGnXxenSHJolIKEcwHq6ikbOX1YGVzQCTN8LPmSLreghUl9sN4Uw7yajMrLC0TZ1ImzqY6FEop0+pIaEN5HaoOxVuwEqFyc4I46uSlzOLqgxlh6UaR9l3VYWl9Fdoxb1Q90KJtu41pwwFW/WHhTtW8i7TafLCqRsk6bsGw63L9qurXRmuIlbT9lDQnlXU+nBFW1Q2qnZbDprWa2tjR90LZFqx1/+Td/HpGWLlrLDvIwTcx6dQ1Vrntbig68cDms3JwbA5Y1azs1ger6sNV/bbIw1jU81MvNAGrl58RVn8ozW+btF08iGFoAlYvP3csfVur1gJBEIA1uBmue5dhZDOyO2epbmgCVi8/I6x0MMHH9pjsTfBhNzQBq5uPZoQlB0uH3DZG4EZqQ26fL3sZq5uf09Ih6qw3i/pm6BZO0qZX7rrUS68Xsbr5ZE4rePMk08pk9aUZugfqppvs6AM1Acvlo/StP+6EbW06z8hJqxbYp2BZPQUnFsLsKuhQdaHqn5ewbF7KXIn0jWO5MqOQ7RaNLPtbNMmmhimj0GUmYLl8Gs0Lq4wyPbTu1l2QKqHSouzs3OlDIslW5SQsnY/NXmFplyNvEuuLV/Tau9BzwiraDUSwXmysztYWWNtL1psXeumgIrDGaqXvBfUuvtqUYI3V2t1wk1e2msFluJJm6zDJXv/fIfjPP7DAAgsssCiwwAILLLDAosACCyywwAKLAgsssMACC6zt9fDz/v75tyOB+98PD2+ORgKffjw4OP1uJPDxl+Xy8v1I4MPF3t7VNyOB4/vF4uzdzrG+39f1kz/w66Guv/yBvw90KX/gZKkr8Qf+2dOV+gNHC12/7RxrabD2/a31bLAO/a11YbAO/K21MFhLf2s9Gqw9f2vdGqzFu11jnVusE2/gxmI9eQOnFuvYG7i0WH7uK4t15w2cWazrXWP9a7H8f/bQYvm/6IPF+sF/pVssf19Ii/WH/0K2WH/uGuvEWC39gSdj9Twy+Rqri5EZx1gt/IE7Y/XoD1wbq9vd3w1PlufnD2OBp+ebm/uxwPHF6emnscDR4vLy41jg7vHq6sNY4Pr27OyYdRaLUrDAAosCCyywwAILLAossMACCyywKLDAAgsssMCiwAILLLDAAosCCyywwAILLAossMACCyywKLDAAgsssMCiwAILLLDAAosCCyywwAILLAossMACCyywKLDAAgsssMCiwAILLLDAAosCCyywwAILLAossMACCyywKLDAAgsssMCiwAILLLDAAosCCyywwAILLAossMACCyywKLDAAgsssL6u+k+AAQCR9eHtLKvLfwAAAABJRU5ErkJggg==" alt="Merge操作解释"></a></p>
+<p><a href="http://oltremare.cc/2019/11/27/SQL%E6%97%A5%E8%AE%B0-SQL%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/Merge%E5%9B%BE%E7%A4%BA.png" target="_blank" rel="noopener">Merge操作解释</a></p>
+<p>通用</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">MERGE</span> target_table <span class="keyword">USING</span> source_table</span><br><span class="line"><span class="keyword">ON</span> merge_condition</span><br><span class="line"><span class="keyword">WHEN</span> <span class="keyword">MATCHED</span></span><br><span class="line">    <span class="keyword">THEN</span> update_statement</span><br><span class="line"><span class="keyword">WHEN</span> <span class="keyword">NOT</span> <span class="keyword">MATCHED</span></span><br><span class="line">    <span class="keyword">THEN</span> insert_statement</span><br><span class="line"><span class="keyword">WHEN</span> <span class="keyword">NOT</span> <span class="keyword">MATCHED</span> <span class="keyword">BY</span> <span class="keyword">SOURCE</span></span><br><span class="line">    <span class="keyword">THEN</span> <span class="keyword">DELETE</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="列出某个表的所有列名"><a href="#列出某个表的所有列名" class="headerlink" title="列出某个表的所有列名"></a>列出某个表的所有列名</h3><p>通用</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> column_name, data_type</span><br><span class="line"><span class="keyword">FROM</span> information_schema</span><br><span class="line"><span class="keyword">WHERE</span> table_schema = <span class="string">'SMEAGOL'</span></span><br><span class="line">  <span class="keyword">AND</span> table_name = <span class="string">'表名'</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="创建分隔符列表"><a href="#创建分隔符列表" class="headerlink" title="创建分隔符列表"></a>创建分隔符列表</h3><p>为表创建一个以X字符为分隔符的列表，例如：</p>
+<table>
+<thead>
+<tr>
+<th align="left">class_id</th>
+<th align="left">sudent_name</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">A</td>
+<td align="left">Student_1</td>
+</tr>
+<tr>
+<td align="left">A</td>
+<td align="left">Student_2</td>
+</tr>
+<tr>
+<td align="left">A</td>
+<td align="left">Student_3</td>
+</tr>
+<tr>
+<td align="left">B</td>
+<td align="left">Student_4</td>
+</tr>
+<tr>
+<td align="left">B</td>
+<td align="left">Student_5</td>
+</tr>
+<tr>
+<td align="left">B</td>
+<td align="left">Student_6</td>
+</tr>
+</tbody></table>
+<p>变为</p>
+<table>
+<thead>
+<tr>
+<th align="left">class_id</th>
+<th align="left">sudent_name</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">A</td>
+<td align="left">Student_1,Student_2,Student_3</td>
+</tr>
+<tr>
+<td align="left">B</td>
+<td align="left">Student_4,Student_5,Student_6</td>
+</tr>
+</tbody></table>
+<p>在SQL Server中使用<code>WITH</code>关键字来创建，MySQL中使用<code>GROUP_CONCAT</code>函数来创建;</p>
+<h3 id="统计行数"><a href="#统计行数" class="headerlink" title="统计行数"></a>统计行数</h3><p>MySQL和SQL Server均使用<code>COUNT()</code>,但需要注意的是如果<code>COUNT()</code>中的参数为列名，则统计时会忽略<code>NULL</code>，而如果是传<code>*</code>或者常量，则会包含<code>NULL</code>;</p>
+<h3 id="聚合函数对于NULL的处理"><a href="#聚合函数对于NULL的处理" class="headerlink" title="聚合函数对于NULL的处理"></a>聚合函数对于<code>NULL</code>的处理</h3><p>在进行聚合运算，例如:<code>SUM</code>、<code>AVG</code>等函数时，函数本身不会对值为<code>NULL</code>的行进行计数和计算，所以，要得到一个客观的聚合值，则需要使用<code>COALESCE</code>等填充函数;</p>
+<h3 id="时间加减"><a href="#时间加减" class="headerlink" title="时间加减"></a>时间加减</h3><p>当前日期向前/向后n天/月/年(但不能加减时/分/秒),MySQL可以直接使用<code>INTERVAL ± 天数 DAY/MONTH/YEAR</code>来操作，而SQL Server使用函数<code>DATEADD()</code>来操作;</p>
+<p>SQL Sever</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># GETDATE() = 2019/12/10 23:05:33</span></span><br><span class="line"><span class="comment"># 输出 2019/12/05 23:05:33</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">DATEADD</span>(<span class="keyword">DAY</span>, <span class="number">-5</span>, <span class="keyword">GETDATE</span>())</span><br></pre></td></tr></table></figure>
+
+<p>MySQL</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># NOW() = 2019/12/10 23:05:33</span></span><br><span class="line"><span class="comment"># 输出 2019/12/05 23:05:33</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">NOW</span>() - <span class="built_in">INTERVAL</span> <span class="number">5</span> <span class="keyword">DAY</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="获取当前系统时间"><a href="#获取当前系统时间" class="headerlink" title="获取当前系统时间"></a>获取当前系统时间</h3><p>两个数据库各不相同，代码如下：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 输出 2019/12/10 23:05:33</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">GETDATE</span>()</span><br></pre></td></tr></table></figure>
+
+<p>MySQL</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 输出 2019/12/10 23:05:33</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">NOW</span>()</span><br></pre></td></tr></table></figure>
+
+<h3 id="计算两个日期之间的天数差"><a href="#计算两个日期之间的天数差" class="headerlink" title="计算两个日期之间的天数差"></a>计算两个日期之间的天数差</h3><p>均使用<code>DATEDIFF</code>函数，只是MySQL只需要两个参数(终止时间, 起始时间)，SQL Server需要三个参数(天/月/年, 起始时间, 终止时间);</p>
+<p>SQL Sever</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 输出 3</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">DATEDIFF</span>(<span class="keyword">DAY</span>, <span class="string">'2019-10-07'</span>, <span class="string">'2019-10-10'</span>)</span><br></pre></td></tr></table></figure>
+
+<p>MySQL</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 输出 3</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">DATEDIFF</span>(<span class="string">'2019-10-10'</span>, <span class="string">'2019-10-07'</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="提取日期中的时分秒"><a href="#提取日期中的时分秒" class="headerlink" title="提取日期中的时分秒"></a>提取日期中的时分秒</h3><p>MySQL使用<code>DATE_FORMAT</code>,SQL Server使用<code>DATEPART</code>;</p>
+<p>SQL Sever</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">DATEPART</span>(<span class="keyword">HOUR</span>, <span class="keyword">GETDATE</span>()) <span class="keyword">AS</span> <span class="keyword">HOUR</span>,</span><br><span class="line">       <span class="keyword">DATEPART</span>(<span class="keyword">MINUTE</span>, <span class="keyword">GETDATE</span>()) <span class="keyword">AS</span> <span class="keyword">MINUTE</span>,</span><br><span class="line">       <span class="keyword">DATEPART</span>(<span class="keyword">SECOND</span>, <span class="keyword">GETDATE</span>()) <span class="keyword">AS</span> <span class="keyword">SECOND</span>,</span><br><span class="line">       <span class="keyword">DATEPART</span>(<span class="keyword">YEAR</span>, <span class="keyword">GETDATE</span>()) <span class="keyword">AS</span> <span class="keyword">YEAR</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">HOUR</span> <span class="keyword">MINUTE</span> <span class="keyword">SECOND</span> <span class="keyword">YEAR</span></span><br><span class="line"> <span class="number">22</span>    <span class="number">14</span>     <span class="number">30</span>   <span class="number">2019</span></span><br></pre></td></tr></table></figure>
+
+<p>MySQL</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">DATE_FORMAT</span>(<span class="keyword">NOW</span>(),<span class="string">'%k'</span>) <span class="keyword">AS</span> <span class="keyword">HOUR</span>,</span><br><span class="line">       <span class="keyword">DATE_FORMAT</span>(<span class="keyword">NOW</span>(),<span class="string">'%i'</span>) <span class="keyword">AS</span> <span class="keyword">MINUTE</span>,</span><br><span class="line">       <span class="keyword">DATE_FORMAT</span>(<span class="keyword">NOW</span>(),<span class="string">'%s'</span>) <span class="keyword">AS</span> <span class="keyword">SECOND</span>,</span><br><span class="line">       <span class="keyword">DATE_FORMAT</span>(<span class="keyword">NOW</span>(),<span class="string">'%d'</span>) <span class="keyword">AS</span> <span class="keyword">MONTH</span>,</span><br><span class="line">       <span class="keyword">DATE_FORMAT</span>(<span class="keyword">NOW</span>(),<span class="string">'%Y'</span>) <span class="keyword">AS</span> <span class="keyword">YEAR</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">HOUR</span> <span class="keyword">MINUTE</span> <span class="keyword">SECOND</span> <span class="keyword">YEAR</span></span><br><span class="line"> <span class="number">22</span>    <span class="number">14</span>     <span class="number">30</span>   <span class="number">2019</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="使用DENSE-RANK对满足前N类或后N类数值档次的数据进行检索"><a href="#使用DENSE-RANK对满足前N类或后N类数值档次的数据进行检索" class="headerlink" title="使用DENSE_RANK对满足前N类或后N类数值档次的数据进行检索"></a>使用<code>DENSE_RANK</code>对满足前N类或后N类数值档次的数据进行检索</h3><p>例如学生的补贴分为5档，现在要筛选出前3档补贴的学生名单，那么可以使用<code>DENSE_RANK</code>来实现;</p>
+<table>
+<thead>
+<tr>
+<th align="left">student_id</th>
+<th align="left">sudent_name</th>
+<th align="left">sudent_subsidy</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">A</td>
+<td align="left">Student_1</td>
+<td align="left">400</td>
+</tr>
+<tr>
+<td align="left">B</td>
+<td align="left">Student_2</td>
+<td align="left">400</td>
+</tr>
+<tr>
+<td align="left">C</td>
+<td align="left">Student_3</td>
+<td align="left">500</td>
+</tr>
+<tr>
+<td align="left">D</td>
+<td align="left">Student_4</td>
+<td align="left">600</td>
+</tr>
+<tr>
+<td align="left">E</td>
+<td align="left">Student_5</td>
+<td align="left">700</td>
+</tr>
+<tr>
+<td align="left">F</td>
+<td align="left">Student_6</td>
+<td align="left">300</td>
+</tr>
+</tbody></table>
+<p>需要检索前3档补贴的同学名单</p>
+<table>
+<thead>
+<tr>
+<th align="left">student_id</th>
+<th align="left">sudent_name</th>
+<th align="left">sudent_subsidy</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">E</td>
+<td align="left">Student_5</td>
+<td align="left">700</td>
+</tr>
+<tr>
+<td align="left">D</td>
+<td align="left">Student_4</td>
+<td align="left">600</td>
+</tr>
+<tr>
+<td align="left">A</td>
+<td align="left">Student_1</td>
+<td align="left">400</td>
+</tr>
+<tr>
+<td align="left">B</td>
+<td align="left">Student_2</td>
+<td align="left">400</td>
+</tr>
+</tbody></table>
+<p>通用</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> student_id, student_name, sudent_subsidy</span><br><span class="line"><span class="keyword">FROM</span> (<span class="keyword">SELECT</span> student_id,</span><br><span class="line">             student_name,</span><br><span class="line">             sudent_subsidy,</span><br><span class="line">             <span class="keyword">DENSE_RANK</span>() <span class="keyword">OVER</span>(<span class="keyword">ORDER</span> <span class="keyword">BY</span> sudent_subsidy <span class="keyword">DESC</span>) <span class="keyword">AS</span> subsidy_rank</span><br><span class="line">      <span class="keyword">FROM</span> students_info) <span class="keyword">AS</span> infos</span><br><span class="line"><span class="keyword">WHERE</span> subsidy_rank &lt;= <span class="number">5</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="ROW-NUMBER-RANK-DENSE-RANK-的区别"><a href="#ROW-NUMBER-RANK-DENSE-RANK-的区别" class="headerlink" title="ROW_NUMBER(),RANK(),DENSE_RANK()的区别"></a><code>ROW_NUMBER()</code>,<code>RANK()</code>,<code>DENSE_RANK()</code>的区别</h3><p><strong>结论</strong>：</p>
+<p><code>ROW_NUMBER()</code><strong>无论数据行是否重复，均会给出独立的行号;</strong></p>
+<p><code>RANK()</code><strong>会跳跃排序，如果遇到排序的列有重复的值时，则会跳过，例如有两个并列第3，那么排名第4的值行号将被记为5</strong></p>
+<p><code>DENSE_RANK()</code><strong>会连续排序，和RANK()相反，如果遇到排序的列有重复的值时，不会跳过，例如有两个并列第3，那么排名第4的值行号将被记为4</strong></p>
+<p>为方便理解，使用以下表数据为例</p>
+<table>
+<thead>
+<tr>
+<th align="left">student_id</th>
+<th align="left">sudent_name</th>
+<th align="left">sudent_subsidy</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">A</td>
+<td align="left">Student_1</td>
+<td align="left">400</td>
+</tr>
+<tr>
+<td align="left">B</td>
+<td align="left">Student_2</td>
+<td align="left">400</td>
+</tr>
+<tr>
+<td align="left">C</td>
+<td align="left">Student_3</td>
+<td align="left">500</td>
+</tr>
+<tr>
+<td align="left">D</td>
+<td align="left">Student_4</td>
+<td align="left">600</td>
+</tr>
+<tr>
+<td align="left">E</td>
+<td align="left">Student_5</td>
+<td align="left">700</td>
+</tr>
+<tr>
+<td align="left">F</td>
+<td align="left">Student_6</td>
+<td align="left">300</td>
+</tr>
+</tbody></table>
+<p><code>ROW_NUMBER()</code>在任何时候都不会发生重复，计算表中有n条相同数据，<code>ROW_NUMBER()</code>后的行号也是不同的</p>
+<p>通用</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> ROW_NUMBER() <span class="keyword">OVER</span>(<span class="keyword">ORDER</span> <span class="keyword">BY</span> sudent_subsidy) <span class="keyword">AS</span> row_num,</span><br><span class="line">       student_id,</span><br><span class="line">       sudent_name,</span><br><span class="line">       sudent_subsidy</span><br><span class="line"><span class="keyword">FROM</span> sudent_subsidy</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th align="left">row_num</th>
+<th align="left">student_id</th>
+<th align="left">sudent_name</th>
+<th align="left">sudent_subsidy</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1</td>
+<td align="left">F</td>
+<td align="left">Student_6</td>
+<td align="left">300</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left">A</td>
+<td align="left">Student_1</td>
+<td align="left">400</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left">B</td>
+<td align="left">Student_2</td>
+<td align="left">400</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left">C</td>
+<td align="left">Student_3</td>
+<td align="left">500</td>
+</tr>
+<tr>
+<td align="left">5</td>
+<td align="left">D</td>
+<td align="left">Student_4</td>
+<td align="left">600</td>
+</tr>
+<tr>
+<td align="left">6</td>
+<td align="left">E</td>
+<td align="left">Student_5</td>
+<td align="left">700</td>
+</tr>
+</tbody></table>
+<p>从返回的结果中，可以看出每一列数据均被赋予了新的一个行号，并不会因为某一列数据重复而重复。</p>
+<p><code>RANK()</code>会跳跃排序，如果有并列，则会将跳过相同的行，直接加上向同行的偏移继续向后统计行号。</p>
+<p>通用</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">RANK</span>() <span class="keyword">OVER</span>(<span class="keyword">ORDER</span> <span class="keyword">BY</span> sudent_subsidy) <span class="keyword">AS</span> <span class="keyword">rank</span>,</span><br><span class="line">       student_id,</span><br><span class="line">       sudent_name,</span><br><span class="line">       sudent_subsidy</span><br><span class="line"><span class="keyword">FROM</span> sudent_subsidy</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th align="left">rank</th>
+<th align="left">student_id</th>
+<th align="left">sudent_name</th>
+<th align="left">sudent_subsidy</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1</td>
+<td align="left">F</td>
+<td align="left">Student_6</td>
+<td align="left">300</td>
+</tr>
+<tr>
+<td align="left"><strong>2</strong></td>
+<td align="left">A</td>
+<td align="left">Student_1</td>
+<td align="left">400</td>
+</tr>
+<tr>
+<td align="left"><strong>2</strong></td>
+<td align="left">B</td>
+<td align="left">Student_2</td>
+<td align="left">400</td>
+</tr>
+<tr>
+<td align="left">4  (rank 3不见了，直接从4开始)</td>
+<td align="left">C</td>
+<td align="left">Student_3</td>
+<td align="left">500</td>
+</tr>
+<tr>
+<td align="left">5</td>
+<td align="left">D</td>
+<td align="left">Student_4</td>
+<td align="left">600</td>
+</tr>
+<tr>
+<td align="left">6</td>
+<td align="left">E</td>
+<td align="left">Student_5</td>
+<td align="left">700</td>
+</tr>
+</tbody></table>
+<p>可以看到，行号从2直接跳到了4，重复行占据了本该3出现的行，则3就被抛弃了。</p>
+<p><code>DENSE_RANK()</code>和<code>RANK()</code>相反，它保留了重复行之后的行号。</p>
+<p>通用</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">DENSE_RANK</span>() <span class="keyword">OVER</span>(<span class="keyword">ORDER</span> <span class="keyword">BY</span> sudent_subsidy) <span class="keyword">AS</span> <span class="keyword">rank</span>,</span><br><span class="line">       student_id,</span><br><span class="line">       sudent_name,</span><br><span class="line">       sudent_subsidy</span><br><span class="line"><span class="keyword">FROM</span> sudent_subsidy</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th align="left">rank</th>
+<th align="left">student_id</th>
+<th align="left">sudent_name</th>
+<th align="left">sudent_subsidy</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1</td>
+<td align="left">F</td>
+<td align="left">Student_6</td>
+<td align="left">300</td>
+</tr>
+<tr>
+<td align="left"><strong>2</strong></td>
+<td align="left">A</td>
+<td align="left">Student_1</td>
+<td align="left">400</td>
+</tr>
+<tr>
+<td align="left"><strong>2</strong></td>
+<td align="left">B</td>
+<td align="left">Student_2</td>
+<td align="left">400</td>
+</tr>
+<tr>
+<td align="left">3  (接着重复行的rank值继续向下排列)</td>
+<td align="left">C</td>
+<td align="left">Student_3</td>
+<td align="left">500</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left">D</td>
+<td align="left">Student_4</td>
+<td align="left">600</td>
+</tr>
+<tr>
+<td align="left">5</td>
+<td align="left">E</td>
+<td align="left">Student_5</td>
+<td align="left">700</td>
+</tr>
+</tbody></table>
+<h3 id="结果集转置为多行"><a href="#结果集转置为多行" class="headerlink" title="结果集转置为多行"></a>结果集转置为多行</h3><p>原表数据为：</p>
+<table>
+<thead>
+<tr>
+<th align="left">emp_no</th>
+<th align="left">ename</th>
+<th align="left">job</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1</td>
+<td align="left">DENY</td>
+<td align="left">CLERK</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left">GINY</td>
+<td align="left">ANALYZER</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left">YINE</td>
+<td align="left">CLERK</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left">MILLER</td>
+<td align="left">CLERK</td>
+</tr>
+<tr>
+<td align="left">5</td>
+<td align="left">JAMES</td>
+<td align="left">CLERK</td>
+</tr>
+<tr>
+<td align="left">6</td>
+<td align="left">CLRAKS</td>
+<td align="left">MGRS</td>
+</tr>
+<tr>
+<td align="left">7</td>
+<td align="left">BLAKES</td>
+<td align="left">MGRS</td>
+</tr>
+<tr>
+<td align="left">8</td>
+<td align="left">JONES</td>
+<td align="left">MGRS</td>
+</tr>
+<tr>
+<td align="left">9</td>
+<td align="left">KING</td>
+<td align="left">PREZ</td>
+</tr>
+<tr>
+<td align="left">10</td>
+<td align="left">TURNE</td>
+<td align="left">SALES</td>
+</tr>
+<tr>
+<td align="left">11</td>
+<td align="left">MARTIN</td>
+<td align="left">SALES</td>
+</tr>
+</tbody></table>
+<p>如果一个查询的结果集如下所示：</p>
+<table>
+<thead>
+<tr>
+<th align="left">ename</th>
+<th align="left">job</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">DENY</td>
+<td align="left">CLERK</td>
+</tr>
+<tr>
+<td align="left">GINY</td>
+<td align="left">ANALYZER</td>
+</tr>
+<tr>
+<td align="left">YINE</td>
+<td align="left">CLERK</td>
+</tr>
+<tr>
+<td align="left">MILLER</td>
+<td align="left">CLERK</td>
+</tr>
+<tr>
+<td align="left">JAMES</td>
+<td align="left">CLERK</td>
+</tr>
+<tr>
+<td align="left">CLRAKS</td>
+<td align="left">MGRS</td>
+</tr>
+<tr>
+<td align="left">BLAKES</td>
+<td align="left">MGRS</td>
+</tr>
+<tr>
+<td align="left">JONES</td>
+<td align="left">MGRS</td>
+</tr>
+<tr>
+<td align="left">KING</td>
+<td align="left">PREZ</td>
+</tr>
+<tr>
+<td align="left">TURNE</td>
+<td align="left">SALES</td>
+</tr>
+<tr>
+<td align="left">MARTIN</td>
+<td align="left">SALES</td>
+</tr>
+</tbody></table>
+<p>我们需要将其转置为职位-姓名，则我们可以使用<code>ROW_NUMBER() OVER(PARTITION BY job ORDER BY ename)</code>得到分组的行号，并结合<code>MAX()</code>聚合函数将其按照行号进行分组，得到最终的结果。</p>
+<p>通用</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">MAX</span>(<span class="keyword">CASE</span> <span class="keyword">WHEN</span> job=<span class="string">'CLERK'</span></span><br><span class="line">                <span class="keyword">THEN</span> ename</span><br><span class="line">                <span class="keyword">ELSE</span> <span class="literal">NULL</span></span><br><span class="line">           <span class="keyword">END</span>) <span class="keyword">AS</span> <span class="string">'CLERK'</span>,</span><br><span class="line">        <span class="keyword">MAX</span>(<span class="keyword">CASE</span> <span class="keyword">WHEN</span> job=<span class="string">'ANALYZER'</span></span><br><span class="line">                <span class="keyword">THEN</span> ename</span><br><span class="line">                <span class="keyword">ELSE</span> <span class="literal">NULL</span></span><br><span class="line">           <span class="keyword">END</span>) <span class="keyword">AS</span> <span class="string">'ANALYZER'</span>,</span><br><span class="line">        <span class="keyword">MAX</span>(<span class="keyword">CASE</span> <span class="keyword">WHEN</span> job=<span class="string">'MGRS'</span></span><br><span class="line">                <span class="keyword">THEN</span> ename</span><br><span class="line">                <span class="keyword">ELSE</span> <span class="literal">NULL</span></span><br><span class="line">           <span class="keyword">END</span>) <span class="keyword">AS</span> <span class="string">'MGRS'</span>,</span><br><span class="line">        <span class="keyword">MAX</span>(<span class="keyword">CASE</span> <span class="keyword">WHEN</span> job=<span class="string">'PREZ'</span></span><br><span class="line">                <span class="keyword">THEN</span> ename</span><br><span class="line">                <span class="keyword">ELSE</span> <span class="literal">NULL</span></span><br><span class="line">           <span class="keyword">END</span>) <span class="keyword">AS</span> <span class="string">'PREZ'</span>,</span><br><span class="line">        <span class="keyword">MAX</span>(<span class="keyword">CASE</span> <span class="keyword">WHEN</span> job=<span class="string">'SALES'</span></span><br><span class="line">                <span class="keyword">THEN</span> ename</span><br><span class="line">                <span class="keyword">ELSE</span> <span class="literal">NULL</span></span><br><span class="line">           <span class="keyword">END</span>) <span class="keyword">AS</span> <span class="string">'SALES'</span></span><br><span class="line"><span class="keyword">FROM</span> (<span class="keyword">SELECT</span> ename,</span><br><span class="line">             job,</span><br><span class="line">             ROW_NUMBER() <span class="keyword">OVER</span>(<span class="keyword">PARTITION</span> <span class="keyword">BY</span> job <span class="keyword">ORDER</span> <span class="keyword">BY</span> ename) <span class="keyword">AS</span> <span class="string">'rn'</span></span><br><span class="line">      <span class="keyword">FROM</span> emp) <span class="keyword">AS</span> e</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> rn</span><br></pre></td></tr></table></figure>
+
+<p>结果如下：</p>
+<table>
+<thead>
+<tr>
+<th align="left">CLERK</th>
+<th align="left">ANALYZER</th>
+<th align="left">MGRS</th>
+<th align="left">PREZ</th>
+<th align="left">SALES</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">DENY</td>
+<td align="left">GINY</td>
+<td align="left">BLAKES</td>
+<td align="left">KING</td>
+<td align="left">TURNE</td>
+</tr>
+<tr>
+<td align="left">YINE</td>
+<td align="left"></td>
+<td align="left">JONES</td>
+<td align="left"></td>
+<td align="left">MARTIN</td>
+</tr>
+<tr>
+<td align="left">JAMES</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">MILLER</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<h3 id="使用WITH-ROLLUP来对报表做简单小计"><a href="#使用WITH-ROLLUP来对报表做简单小计" class="headerlink" title="使用WITH ROLLUP来对报表做简单小计"></a>使用<code>WITH ROLLUP</code>来对报表做简单小计</h3><p>例如可以将报表中所有学生补贴总和进行总计，如果<code>GROUP BY</code>的字段变多，那么小计的行也会随之增加;</p>
+<p>原始数据如下：</p>
+<table>
+<thead>
+<tr>
+<th align="left">student_id</th>
+<th align="left">sudent_name</th>
+<th align="left">sudent_subsidy</th>
+<th align="left">class</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">A</td>
+<td align="left">Student_1</td>
+<td align="left">400</td>
+<td align="left">1</td>
+</tr>
+<tr>
+<td align="left">B</td>
+<td align="left">Student_2</td>
+<td align="left">400</td>
+<td align="left">2</td>
+</tr>
+<tr>
+<td align="left">C</td>
+<td align="left">Student_3</td>
+<td align="left">500</td>
+<td align="left">3</td>
+</tr>
+<tr>
+<td align="left">D</td>
+<td align="left">Student_4</td>
+<td align="left">600</td>
+<td align="left">1</td>
+</tr>
+<tr>
+<td align="left">E</td>
+<td align="left">Student_5</td>
+<td align="left">700</td>
+<td align="left">2</td>
+</tr>
+<tr>
+<td align="left">F</td>
+<td align="left">Student_6</td>
+<td align="left">300</td>
+<td align="left">3</td>
+</tr>
+</tbody></table>
+<p>SQL Sever</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">COALESCE</span>(<span class="keyword">class</span>, <span class="string">'total'</span>), <span class="keyword">SUM</span>(sudent_subsidy)</span><br><span class="line"><span class="keyword">FROM</span> student_infos</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> <span class="keyword">ROLLUP</span>(<span class="keyword">class</span>)</span><br></pre></td></tr></table></figure>
+
+<p>MySQL</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">COALESCE</span>(<span class="keyword">class</span>, <span class="string">'total'</span>), <span class="keyword">SUM</span>(sudent_subsidy)</span><br><span class="line"><span class="keyword">FROM</span> student_infos</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> <span class="keyword">class</span> <span class="keyword">WITH</span> <span class="keyword">ROLLUP</span></span><br></pre></td></tr></table></figure>
+
+<p>使用了<code>ROLLUP</code>后的结果集为</p>
+<table>
+<thead>
+<tr>
+<th align="left">CLASS</th>
+<th align="left">sudent_name</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1</td>
+<td align="left">1000</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left">1100</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left">800</td>
+</tr>
+<tr>
+<td align="left">total</td>
+<td align="left">2900</td>
+</tr>
+</tbody></table>
+<h3 id="多列共同进行协同总计和展示"><a href="#多列共同进行协同总计和展示" class="headerlink" title="多列共同进行协同总计和展示"></a>多列共同进行协同总计和展示</h3><p>在<code>WITH ROLLUP</code>的基础上进行扩展;</p>
+<p>在23中，如果我们需要进行统计列不仅仅只是<code>student_name</code>,那么，我们仅仅使用<code>WITH ROLLUP</code>则会得到很多冗余行，例如，要按班级号和班级名称来共同计算每个班级的补贴和，并且展示班级号、班级名和补贴和，那么，我们需要引入<code>GROUPING()</code>来对每列的数据进行分组标记，在此处我们可以通过如下代码来查看<code>GROUPING()</code>在查询时会输出什么：</p>
+<p>原始数据：</p>
+<table>
+<thead>
+<tr>
+<th align="left">student_id</th>
+<th align="left">sudent_name</th>
+<th align="left">sudent_subsidy</th>
+<th align="left">class</th>
+<th align="left">class_name</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">A</td>
+<td align="left">Student_1</td>
+<td align="left">400</td>
+<td align="left">1</td>
+<td align="left">尖子班</td>
+</tr>
+<tr>
+<td align="left">B</td>
+<td align="left">Student_2</td>
+<td align="left">400</td>
+<td align="left">2</td>
+<td align="left">快速班</td>
+</tr>
+<tr>
+<td align="left">C</td>
+<td align="left">Student_3</td>
+<td align="left">500</td>
+<td align="left">3</td>
+<td align="left">平行班</td>
+</tr>
+<tr>
+<td align="left">D</td>
+<td align="left">Student_4</td>
+<td align="left">600</td>
+<td align="left">1</td>
+<td align="left">尖子班</td>
+</tr>
+<tr>
+<td align="left">E</td>
+<td align="left">Student_5</td>
+<td align="left">700</td>
+<td align="left">2</td>
+<td align="left">快速班</td>
+</tr>
+<tr>
+<td align="left">F</td>
+<td align="left">Student_6</td>
+<td align="left">300</td>
+<td align="left">3</td>
+<td align="left">平行班</td>
+</tr>
+</tbody></table>
+<p>SQL Sever</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">class</span>, class_name, <span class="keyword">GROUPING</span>(<span class="keyword">class</span>), <span class="keyword">GROUPING</span>(class_name), <span class="keyword">SUM</span>(sudent_subsidy) <span class="keyword">AS</span> <span class="string">'money'</span></span><br><span class="line"><span class="keyword">FROM</span> student_infos</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> <span class="keyword">ROLLUP</span>(<span class="keyword">class</span>, class_name)</span><br></pre></td></tr></table></figure>
+
+<p>MySQL</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">class</span>, class_name, <span class="keyword">GROUPING</span>(<span class="keyword">class</span>), <span class="keyword">GROUPING</span>(class_name), <span class="keyword">SUM</span>(sudent_subsidy) <span class="keyword">AS</span> <span class="string">'money'</span></span><br><span class="line"><span class="keyword">FROM</span> student_infos</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> <span class="keyword">class</span>, class_name <span class="keyword">WITH</span> <span class="keyword">ROLLUP</span></span><br></pre></td></tr></table></figure>
+
+<p>输出的结果为</p>
+<table>
+<thead>
+<tr>
+<th align="left">class</th>
+<th align="left">class_name</th>
+<th align="left">GROUPING(class)</th>
+<th align="left">GROUPING(class_name)</th>
+<th align="left">money</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">A</td>
+<td align="left">尖子班</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">1000</td>
+</tr>
+<tr>
+<td align="left">A</td>
+<td align="left">NULL</td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">1000</td>
+</tr>
+<tr>
+<td align="left">B</td>
+<td align="left">快速班</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">1100</td>
+</tr>
+<tr>
+<td align="left">B</td>
+<td align="left">NULL</td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">1100</td>
+</tr>
+<tr>
+<td align="left">C</td>
+<td align="left">平行班</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">800</td>
+</tr>
+<tr>
+<td align="left">C</td>
+<td align="left">NULL</td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">800</td>
+</tr>
+<tr>
+<td align="left">NULL</td>
+<td align="left">NULL</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">2900</td>
+</tr>
+</tbody></table>
+<p>我们可以看到<code>class_name</code>列，若<code>class_name</code>列在<code>ROLLUP</code>后为空，则<code>GROUPING(class_name)</code>的值为0，否则为1。这样我们就能够通过<code>GROUPING</code>函数区分出我们所需要的列的组合以及对应的统计数据。现在，我们只需要两个GROUPING列均为0的来作为最终结果，所以，我们把两个GROUPING列使用字符串进行拼接，而后即可取出值为<code>00</code>(SQL Server)/<code>0</code>(MySQL)和<code>2</code>(MySQL)的行来作为需要返回的列的标识：</p>
+<p>SQL Server</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">WITH</span> <span class="keyword">result</span> <span class="keyword">AS</span> (</span><br><span class="line">  <span class="keyword">SELECT</span> COALESC(<span class="keyword">class</span>, <span class="string">'合计'</span>), COALESC(class_name, <span class="string">'合计'</span>),</span><br><span class="line">       <span class="keyword">CAST</span>(<span class="keyword">GROUPING</span>(<span class="keyword">class</span>) <span class="keyword">AS</span> <span class="built_in">CHAR</span>(<span class="number">1</span>)) +  <span class="keyword">CAST</span>(<span class="keyword">GROUPING</span>(class_name) <span class="keyword">AS</span> <span class="built_in">CHAR</span>(<span class="number">1</span>)) <span class="keyword">AS</span> <span class="string">'combine'</span>,</span><br><span class="line">       <span class="keyword">SUM</span>(sudent_subsidy) <span class="keyword">AS</span> <span class="string">'total_money'</span></span><br><span class="line">  <span class="keyword">FROM</span> student_infos</span><br><span class="line">  <span class="keyword">GROUP</span> <span class="keyword">BY</span> <span class="keyword">class</span>, class_name <span class="keyword">WITH</span> <span class="keyword">ROLLUP</span></span><br><span class="line">)</span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">class</span>, class_name, total_money</span><br><span class="line"><span class="keyword">FROM</span> <span class="keyword">result</span></span><br><span class="line"><span class="keyword">WHERE</span> combine = <span class="string">'00'</span></span><br></pre></td></tr></table></figure>
+
+<p>MySQL</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">WITH</span> <span class="keyword">result</span> <span class="keyword">AS</span> (</span><br><span class="line">  <span class="keyword">SELECT</span> COALESC(<span class="keyword">class</span>, <span class="string">'合计'</span>), COALESC(class_name, <span class="string">'合计'</span>),</span><br><span class="line">       <span class="keyword">CAST</span>(<span class="keyword">GROUPING</span>(<span class="keyword">class</span>) <span class="keyword">AS</span> <span class="built_in">CHAR</span>(<span class="number">1</span>)) +  <span class="keyword">CAST</span>(<span class="keyword">GROUPING</span>(class_name) <span class="keyword">AS</span> <span class="built_in">CHAR</span>(<span class="number">1</span>)) <span class="keyword">AS</span> <span class="string">'combine'</span>,</span><br><span class="line">       <span class="keyword">SUM</span>(sudent_subsidy) <span class="keyword">AS</span> <span class="string">'total_money'</span></span><br><span class="line">  <span class="keyword">FROM</span> student_infos</span><br><span class="line">  <span class="keyword">GROUP</span> <span class="keyword">BY</span> <span class="keyword">class</span>, class_name <span class="keyword">WITH</span> <span class="keyword">ROLLUP</span></span><br><span class="line">)</span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">class</span>, class_name, total_money</span><br><span class="line"><span class="keyword">FROM</span> <span class="keyword">result</span></span><br><span class="line"><span class="keyword">WHERE</span> combine = <span class="string">'2'</span></span><br><span class="line">  <span class="keyword">OR</span> combine = <span class="string">'0'</span></span><br></pre></td></tr></table></figure>
+
+<p>结果为：</p>
+<table>
+<thead>
+<tr>
+<th align="left">class</th>
+<th align="left">class_name</th>
+<th align="left">money</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">A</td>
+<td align="left">尖子班</td>
+<td align="left">1000</td>
+</tr>
+<tr>
+<td align="left">B</td>
+<td align="left">快速班</td>
+<td align="left">1100</td>
+</tr>
+<tr>
+<td align="left">C</td>
+<td align="left">平行班</td>
+<td align="left">800</td>
+</tr>
+<tr>
+<td align="left">合计</td>
+<td align="left">合计</td>
+<td align="left">2900</td>
+</tr>
+</tbody></table>
+<h3 id="GROUP-BY-1-ORDER-BY-1是什么意思"><a href="#GROUP-BY-1-ORDER-BY-1是什么意思" class="headerlink" title="GROUP BY 1/ORDER BY 1是什么意思"></a>GROUP BY 1/ORDER BY 1是什么意思</h3><p><code>GROUP BY 1</code> 和 <code>ORDER BY 1</code>和使用列名的效果相同，<code>1</code>、<code>2</code>代替了<code>SELECT</code>语句中的列别名。</p>
+<p>通用</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> account_id, open_emp_id</span><br><span class="line">         ^^^^        ^^^^</span><br><span class="line">          <span class="number">1</span>           <span class="number">2</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">FROM</span> <span class="keyword">account</span></span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="INT转String-String转INT"><a href="#INT转String-String转INT" class="headerlink" title="INT转String/String转INT"></a>INT转String/String转INT</h3><p>INT -&gt; String</p>
+<p>SQL Server</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">CONVERT</span>(<span class="built_in">CHAR</span>, <span class="number">123</span>)</span><br></pre></td></tr></table></figure>
+
+<p>MySQL</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">CONVERT</span>(<span class="number">123</span>, <span class="built_in">CHAR</span>)</span><br></pre></td></tr></table></figure>
+
+<p>String -&gt; INT</p>
+<p>SQL Server</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">CONVERT</span>(<span class="built_in">INT</span>, <span class="number">123</span>)</span><br></pre></td></tr></table></figure>
+
+<p>MySQL</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">CONVERT</span>(<span class="number">123</span>, <span class="keyword">UNSIGNED</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="字符串REPLACE"><a href="#字符串REPLACE" class="headerlink" title="字符串REPLACE"></a>字符串REPLACE</h3><p>通用</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 输出为BCD</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">REPLACE</span>(<span class="string">'ABCD'</span>, <span class="string">'A'</span>, <span class="string">''</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="MySQL-GROUP-BY也可指定排序顺序"><a href="#MySQL-GROUP-BY也可指定排序顺序" class="headerlink" title="MySQL GROUP BY也可指定排序顺序"></a>MySQL GROUP BY也可指定排序顺序</h3><p>如果需要对分组后的数据按照分组信息进行降序排序，可以使用<code>GROUP BY 列名 DESC</code>实现，而不用再使用<code>ORDER BY</code>。<strong>注意：MySQL中如果要使用这样的语法特性，则需要特定的版本(MySQL 8.0以前可以使用)！</strong></p>
+<h3 id="保留n位小数点"><a href="#保留n位小数点" class="headerlink" title="保留n位小数点"></a>保留n位小数点</h3><p>SQL Server稍有不同，在SQL Server中<code>ROUND</code>仅仅只起到从第几位其四舍五入的作用，如果小数点有6位，<code>ROUND(3.333333, 4)</code>的结果为3.333300，位数仍然是6位，只是从第4位起就四舍五入了而已，如果要截断成4位则使用<code>DECIMAL</code>即可。</p>
+<p>SQL Server</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 输出为 123.6</span></span><br><span class="line"><span class="comment">-- DECIMAL(18, 1)中 18为整个数字的总位数 可以根据实际的情况进行调整 1为截断的位数</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">CAST</span>(<span class="keyword">ROUND</span>(<span class="number">123.55</span>, <span class="number">1</span>) <span class="keyword">AS</span> <span class="built_in">DECIMAL</span>(<span class="number">18</span>, <span class="number">1</span>))</span><br></pre></td></tr></table></figure>
+
+<p>MySQL</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 输出为 123.5</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">ROUND</span>(<span class="number">123.54</span>, <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="向上-向下取整"><a href="#向上-向下取整" class="headerlink" title="向上/向下取整"></a>向上/向下取整</h3><p>向上取整</p>
+<p>SQL Server</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 输出为 124</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">CEILING</span>(<span class="number">123.54</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 输出为 123</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">CEILING</span>(<span class="number">123</span>)</span><br></pre></td></tr></table></figure>
+
+<p>MySQ</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 输出为 124</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">CEILING</span>/<span class="keyword">CEIL</span>(<span class="number">123.54</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 输出为 123</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">CEILING</span>/<span class="keyword">CEIL</span>(<span class="number">123</span>)</span><br></pre></td></tr></table></figure>
+
+<p>在MySQL中，<code>CEIL</code>和<code>CEILING</code>是同义的。</p>
+<p>向下取整</p>
+<p>通用</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 输出为 123</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">FLOOR</span>(<span class="number">123.23</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 输出为 123</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">FLOOR</span>(<span class="number">123</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="区分二叉树的节点类型"><a href="#区分二叉树的节点类型" class="headerlink" title="区分二叉树的节点类型"></a>区分二叉树的节点类型</h3><p>此题来源于：<a href="https://www.hackerrank.com/challenges/binary-search-tree-1/problem" target="_blank" rel="noopener">Binary Tree Nodes</a></p>
+<p>若存在一颗二叉树，其存储方式如下：</p>
+<table>
+<thead>
+<tr>
+<th align="left">node</th>
+<th align="left">parent</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1</td>
+<td align="left">2</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left">2</td>
+</tr>
+<tr>
+<td align="left">6</td>
+<td align="left">8</td>
+</tr>
+<tr>
+<td align="left">9</td>
+<td align="left">8</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left">5</td>
+</tr>
+<tr>
+<td align="left">8</td>
+<td align="left">5</td>
+</tr>
+<tr>
+<td align="left">5</td>
+<td align="left">NULL</td>
+</tr>
+</tbody></table>
+<p>我们需要将其划分为<code>根节点</code>、<code>叶子节点</code>、<code>内部节点</code>三种属性。<br>那么我们可以使用自连接来判断每个节点所在位置，而后进行输出。</p>
+<p>通用</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">DISTINCT</span> B1.N <span class="keyword">AS</span> NODE,</span><br><span class="line">       <span class="keyword">CASE</span> <span class="keyword">WHEN</span> B1.P <span class="keyword">IS</span> <span class="literal">NULL</span> <span class="keyword">THEN</span> <span class="string">'Root'</span></span><br><span class="line">            <span class="keyword">WHEN</span> B2.N <span class="keyword">IS</span> <span class="literal">NULL</span> <span class="keyword">AND</span> B2.P <span class="keyword">IS</span> <span class="literal">NULL</span> <span class="keyword">THEN</span> <span class="string">'Leaf'</span></span><br><span class="line">            <span class="keyword">ELSE</span> <span class="string">'Inner'</span></span><br><span class="line">            <span class="keyword">END</span> <span class="keyword">AS</span> <span class="keyword">ATTRIBUTE</span></span><br><span class="line"><span class="keyword">FROM</span> BST <span class="keyword">AS</span> B1</span><br><span class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> BST <span class="keyword">AS</span> B2 <span class="keyword">ON</span> B1.N = B2.P</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p>结果为：</p>
+<table>
+<thead>
+<tr>
+<th align="left">node</th>
+<th align="left">attribute</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1</td>
+<td align="left">Leaf</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left">Inner</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left">Leaf</td>
+</tr>
+<tr>
+<td align="left">5</td>
+<td align="left">Root</td>
+</tr>
+<tr>
+<td align="left">6</td>
+<td align="left">Leaf</td>
+</tr>
+<tr>
+<td align="left">8</td>
+<td align="left">Inner</td>
+</tr>
+<tr>
+<td align="left">9</td>
+<td align="left">Leaf</td>
+</tr>
+</tbody></table>
+<h3 id="数字开方-绝对值-幂次方"><a href="#数字开方-绝对值-幂次方" class="headerlink" title="数字开方/绝对值/幂次方"></a>数字开方/绝对值/幂次方</h3><p>开平方使用<code>SQRT</code>即可。</p>
+<p>通用</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 输出为2</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">SQRT</span>(<span class="number">2</span>, <span class="number">3</span>)</span><br></pre></td></tr></table></figure>
+
+<p>绝对值使用<code>ABS</code>即可。</p>
+<p>通用</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 输出为2</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">ABS</span>(<span class="number">-2</span>)</span><br></pre></td></tr></table></figure>
+
+<p>幂次方使用<code>POWER</code>即可。</p>
+<p>通用</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 输出为4</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">POWER</span>(<span class="number">2</span>, <span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用WITH进行复杂查询"><a href="#使用WITH进行复杂查询" class="headerlink" title="使用WITH进行复杂查询"></a>使用WITH进行复杂查询</h3><p>如果一个查询过于复杂，无法在一个查询中完成所有操作，可以考虑使用<code>WITH</code>关键词进行分步操作。<code>WITH</code>可以用于分布操作，同样也可以用于递归，将上一个操作结果集中的数据继续进行相同的处理。</p>
+<p>通用</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">WITH</span> STEP1 <span class="keyword">AS</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> <span class="string">'STEP 1 OPERATION'</span></span><br><span class="line">    <span class="keyword">FROM</span> TEMP</span><br><span class="line">), STEP <span class="number">2</span> <span class="keyword">AS</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> <span class="string">'STEP 2 OPERATION CONTINUE WITH STEP 1'</span></span><br><span class="line">    <span class="keyword">FROM</span> STEP1</span><br><span class="line">), STEP3 <span class="keyword">AS</span>(</span><br><span class="line">    ...</span><br><span class="line">), ...</span><br><span class="line"> , <span class="keyword">RESULT</span> <span class="keyword">AS</span> (</span><br><span class="line">   <span class="keyword">SELECT</span> *</span><br><span class="line">   <span class="keyword">FROM</span> STEPN</span><br><span class="line"> )</span><br><span class="line"><span class="keyword">SELECT</span> <span class="string">'RESULT'</span></span><br><span class="line"><span class="keyword">FROM</span> <span class="keyword">RESULT</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="通过JOIN进行区间到具体值的映射"><a href="#通过JOIN进行区间到具体值的映射" class="headerlink" title="通过JOIN进行区间到具体值的映射"></a>通过JOIN进行区间到具体值的映射</h3><p>此题来源于：<a href="https://www.hackerrank.com/challenges/the-report/problem" target="_blank" rel="noopener">The Report</a></p>
+<p>如果提供了一个学生表和一个成绩对应的分级表(表如下)，但两个表之间并没有可以一一对应的主键外键关系，我们需要对每个学生的成绩所在的级别进行显示，我们可以使用如下的方式进行。</p>
+<p>学生表Students</p>
+<table>
+<thead>
+<tr>
+<th align="left">student</th>
+<th align="left">score</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">A</td>
+<td align="left">82</td>
+</tr>
+<tr>
+<td align="left">B</td>
+<td align="left">60</td>
+</tr>
+<tr>
+<td align="left">C</td>
+<td align="left">25</td>
+</tr>
+</tbody></table>
+<p>成绩对应表Grades</p>
+<table>
+<thead>
+<tr>
+<th align="left">grade</th>
+<th align="left">min_score</th>
+<th align="left">max_score</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">优秀</td>
+<td align="left">75</td>
+<td align="left">100</td>
+</tr>
+<tr>
+<td align="left">良好</td>
+<td align="left">50</td>
+<td align="left">74</td>
+</tr>
+<tr>
+<td align="left">中等</td>
+<td align="left">25</td>
+<td align="left">49</td>
+</tr>
+<tr>
+<td align="left">较差</td>
+<td align="left">0</td>
+<td align="left">24</td>
+</tr>
+</tbody></table>
+<p>那么我们可以这样使用<code>JOIN</code>,来将每个学生的成绩级别进行映射，因为<code>ON</code>会先于<code>JOIN</code>对符合条件的数据进行匹配，所以每一条数据只会对应一个级别，我们就可以完成分数段到级别的匹配。</p>
+<p>通用</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> student, grade</span><br><span class="line"><span class="keyword">FROM</span> Students</span><br><span class="line"><span class="keyword">INNER</span> <span class="keyword">JOIN</span> Grades <span class="keyword">ON</span> score <span class="keyword">BETWEEN</span> min_score <span class="keyword">AND</span> max_score</span><br></pre></td></tr></table></figure>
+
+<p>结果</p>
+<table>
+<thead>
+<tr>
+<th align="left">student</th>
+<th align="left">grade</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">A</td>
+<td align="left">优秀</td>
+</tr>
+<tr>
+<td align="left">B</td>
+<td align="left">良好</td>
+</tr>
+<tr>
+<td align="left">C</td>
+<td align="left">较差</td>
+</tr>
+</tbody></table>
+<h2 id="查看字符串是否包含特定字符"><a href="#查看字符串是否包含特定字符" class="headerlink" title="查看字符串是否包含特定字符"></a>查看字符串是否包含特定字符</h2><p>类似于Java的<code>contains()</code>函数，SQL Server和MySQL可以使用如下方式来得到结果，包含匹配的字符串，返回字符串的所在的<strong>第一个下标</strong>，不包含返回<code>0</code>。</p>
+<p>PS:匹配的字符串不仅可以是独立的字符，同样也可以是正则表达式。</p>
+<p>SQL Server</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 匹配的字符串存在的情况</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">PATINDEX</span>(<span class="string">'%O%'</span>, <span class="string">'Oltremare'</span>)</span><br><span class="line"><span class="comment">-- 输出 1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 匹配的字符串不存在的情况</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">PATINDEX</span>(<span class="string">'%X%'</span>, <span class="string">'Oltremare'</span>)</span><br><span class="line"><span class="comment">-- 输出 0</span></span><br></pre></td></tr></table></figure>
+
+<p>MySQL</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 匹配的字符串存在的情况</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">INSTR</span>(<span class="string">'Oltremare'</span>, <span class="string">'%O%'</span>)</span><br><span class="line"><span class="comment">-- 输出 1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 匹配的字符串不存在的情况</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">INSTR</span>(<span class="string">'Oltremare'</span>, <span class="string">'%X%'</span>)</span><br><span class="line"><span class="comment">--输出 0</span></span><br></pre></td></tr></table></figure>
+
+<p><code>%</code>用于模糊匹配，<code>%X</code>表示匹配以<code>X</code>结尾的<code>X</code>下标，反之，<code>X%</code>表示匹配以<code>X</code>开头的<code>X</code>下标，<strong>必须要使用至少一个%来进行匹配查询</strong>。</p>
+<p>待续…</p>
+
+    </div>
+
+    
+    
+    
+	
+	<div> <div> <div style="text-align:center;color:#bfbfbf;font-size:16px;"> <span>-------- 本文结束 </span> <i class="fa fa-paw"></i> <span> 感谢阅读 --------</span> </div> </div> </div>
+	<div>
+    
+        
+    
+	</div>
+        <div class="reward-container">
+  <div></div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.jpg" alt="旭仔 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.jpg" alt="旭仔 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>旭仔
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://yoursite.com/2020/08/13/SQL必会知识/" title="SQL必会知识点">http://yoursite.com/2020/08/13/SQL必会知识/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/SQL/" rel="tag"><i class="fa fa-tag"></i> SQL</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/08/13/SQL日记SQL格式应该这样写/" rel="prev" title="SQL格式应该这样写">
+      <i class="fa fa-chevron-left"></i> SQL格式应该这样写
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/08/14/SQL日记乐观锁和悲观锁/" rel="next" title="SQL日记乐观锁和悲观锁">
+      SQL日记乐观锁和悲观锁 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#正文"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#字段别名作用域"><span class="nav-number">2.1.</span> <span class="nav-text">字段别名作用域</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字符串拼接"><span class="nav-number">2.2.</span> <span class="nav-text">字符串拼接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CASE-WHEN用法"><span class="nav-number">2.3.</span> <span class="nav-text">CASE WHEN用法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#生成随机数"><span class="nav-number">2.4.</span> <span class="nav-text">生成随机数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#判断字段是否为空"><span class="nav-number">2.5.</span> <span class="nav-text">判断字段是否为空</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#计算时间差"><span class="nav-number">2.6.</span> <span class="nav-text">计算时间差</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用UNION-ALL代替UNION"><span class="nav-number">2.7.</span> <span class="nav-text">使用UNION ALL代替UNION</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FULL-OUTER-JOIN使用以及JOIN的关系"><span class="nav-number">2.8.</span> <span class="nav-text">FULL OUTER JOIN使用以及JOIN的关系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OVER-函数用法"><span class="nav-number">2.9.</span> <span class="nav-text">OVER()函数用法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字符串切片"><span class="nav-number">2.10.</span> <span class="nav-text">字符串切片</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IN与EXIST的使用"><span class="nav-number">2.11.</span> <span class="nav-text">IN与EXIST的使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用MERGE进行表数据的同步"><span class="nav-number">2.12.</span> <span class="nav-text">使用MERGE进行表数据的同步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#列出某个表的所有列名"><span class="nav-number">2.13.</span> <span class="nav-text">列出某个表的所有列名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建分隔符列表"><span class="nav-number">2.14.</span> <span class="nav-text">创建分隔符列表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#统计行数"><span class="nav-number">2.15.</span> <span class="nav-text">统计行数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#聚合函数对于NULL的处理"><span class="nav-number">2.16.</span> <span class="nav-text">聚合函数对于NULL的处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#时间加减"><span class="nav-number">2.17.</span> <span class="nav-text">时间加减</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获取当前系统时间"><span class="nav-number">2.18.</span> <span class="nav-text">获取当前系统时间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#计算两个日期之间的天数差"><span class="nav-number">2.19.</span> <span class="nav-text">计算两个日期之间的天数差</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#提取日期中的时分秒"><span class="nav-number">2.20.</span> <span class="nav-text">提取日期中的时分秒</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用DENSE-RANK对满足前N类或后N类数值档次的数据进行检索"><span class="nav-number">2.21.</span> <span class="nav-text">使用DENSE_RANK对满足前N类或后N类数值档次的数据进行检索</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ROW-NUMBER-RANK-DENSE-RANK-的区别"><span class="nav-number">2.22.</span> <span class="nav-text">ROW_NUMBER(),RANK(),DENSE_RANK()的区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#结果集转置为多行"><span class="nav-number">2.23.</span> <span class="nav-text">结果集转置为多行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用WITH-ROLLUP来对报表做简单小计"><span class="nav-number">2.24.</span> <span class="nav-text">使用WITH ROLLUP来对报表做简单小计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多列共同进行协同总计和展示"><span class="nav-number">2.25.</span> <span class="nav-text">多列共同进行协同总计和展示</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GROUP-BY-1-ORDER-BY-1是什么意思"><span class="nav-number">2.26.</span> <span class="nav-text">GROUP BY 1/ORDER BY 1是什么意思</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#INT转String-String转INT"><span class="nav-number">2.27.</span> <span class="nav-text">INT转String/String转INT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字符串REPLACE"><span class="nav-number">2.28.</span> <span class="nav-text">字符串REPLACE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MySQL-GROUP-BY也可指定排序顺序"><span class="nav-number">2.29.</span> <span class="nav-text">MySQL GROUP BY也可指定排序顺序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#保留n位小数点"><span class="nav-number">2.30.</span> <span class="nav-text">保留n位小数点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#向上-向下取整"><span class="nav-number">2.31.</span> <span class="nav-text">向上/向下取整</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#区分二叉树的节点类型"><span class="nav-number">2.32.</span> <span class="nav-text">区分二叉树的节点类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数字开方-绝对值-幂次方"><span class="nav-number">2.33.</span> <span class="nav-text">数字开方/绝对值/幂次方</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用WITH进行复杂查询"><span class="nav-number">2.34.</span> <span class="nav-text">使用WITH进行复杂查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过JOIN进行区间到具体值的映射"><span class="nav-number">2.35.</span> <span class="nav-text">通过JOIN进行区间到具体值的映射</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看字符串是否包含特定字符"><span class="nav-number">3.</span> <span class="nav-text">查看字符串是否包含特定字符</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="旭仔"
+      src="/images/yangxu.jpg">
+  <p class="site-author-name" itemprop="name">旭仔</p>
+  <div class="site-description" itemprop="description">不辜负每一份热情<br/>也不讨好每一份冷漠</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/xuzaiya" title="GitHub → https://github.com/xuzaiya" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/274404901@qq.com" title="E-Mail → 274404901@qq.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="link fa-fw"></i>
+      友情链接
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://monya.co" title="http://monya.co" rel="noopener" target="_blank">小黄</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://oltremare.cc/" title="http://oltremare.cc/" rel="noopener" target="_blank">大戴</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://zengyangcloud.com/" title="https://zengyangcloud.com/" rel="noopener" target="_blank">曾🐏</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://9dtrrn.coding-pages.com/" title="http://9dtrrn.coding-pages.com/" rel="noopener" target="_blank">GEC</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">
+  
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yangxu</span>
+</div>
+
+
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+        
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              leancloudSelector(url).innerText = 'Counter not initialized! More info at console err msg.';
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"SodJt8SkMxqIhIFnHz50p1I9-gzGzoHsz","app_key":"x0AqxoJLrMJEDQRD4CQngS3j","server_url":null,"Dependencies":"https://github.com/theme-next/hexo-leancloud-counter-security","security":true,"betterPerformance":true};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'SodJt8SkMxqIhIFnHz50p1I9-gzGzoHsz',
+      appKey     : 'x0AqxoJLrMJEDQRD4CQngS3j',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+    <!-- 页面点击小红心 -->
+    <script type="text/javascript" src="/js/clicklove.js"></script>
+
+
+</html>
